@@ -32,6 +32,41 @@ const FOOD_DATABASE = [
     {id: 30, name: 'Café Preto', category: 'beverages', calories: 2, protein: 0.3, carbs: 0, fat: 0, emoji: '☕', serving_size: 100},
 ];
 
+// Exercise Database
+const EXERCISE_DATABASE = [
+    // Gym exercises
+    {id: 1, name: 'Supino Reto', category: 'gym', muscle: 'peito', equipment: 'barra', calories_per_min: 8},
+    {id: 2, name: 'Supino Inclinado', category: 'gym', muscle: 'peito', equipment: 'barra', calories_per_min: 7},
+    {id: 3, name: 'Crucifixo', category: 'gym', muscle: 'peito', equipment: 'halteres', calories_per_min: 6},
+    {id: 4, name: 'Agachamento Livre', category: 'gym', muscle: 'pernas', equipment: 'barra', calories_per_min: 10},
+    {id: 5, name: 'Leg Press', category: 'gym', muscle: 'pernas', equipment: 'máquina', calories_per_min: 8},
+    {id: 6, name: 'Cadeira Extensora', category: 'gym', muscle: 'pernas', equipment: 'máquina', calories_per_min: 6},
+    {id: 7, name: 'Mesa Flexora', category: 'gym', muscle: 'pernas', equipment: 'máquina', calories_per_min: 6},
+    {id: 8, name: 'Stiff', category: 'gym', muscle: 'costas', equipment: 'barra', calories_per_min: 9},
+    {id: 9, name: 'Puxada Alta', category: 'gym', muscle: 'costas', equipment: 'polia', calories_per_min: 7},
+    {id: 10, name: 'Remada Curvada', category: 'gym', muscle: 'costas', equipment: 'barra', calories_per_min: 8},
+    {id: 11, name: 'Desenvolvimento Militar', category: 'gym', muscle: 'ombros', equipment: 'barra', calories_per_min: 7},
+    {id: 12, name: 'Elevação Lateral', category: 'gym', muscle: 'ombros', equipment: 'halteres', calories_per_min: 5},
+    {id: 13, name: 'Rosca Direta', category: 'gym', muscle: 'bíceps', equipment: 'barra', calories_per_min: 5},
+    {id: 14, name: 'Rosca Martelo', category: 'gym', muscle: 'bíceps', equipment: 'halteres', calories_per_min: 4},
+    {id: 15, name: 'Tríceps Pulley', category: 'gym', muscle: 'tríceps', equipment: 'polia', calories_per_min: 5},
+    {id: 16, name: 'Tríceps Testa', category: 'gym', muscle: 'tríceps', equipment: 'halteres', calories_per_min: 4},
+    {id: 17, name: 'Abdominal Infra', category: 'gym', muscle: 'abdomen', equipment: 'banco', calories_per_min: 6},
+    {id: 18, name: 'Abdominal Supra', category: 'gym', muscle: 'abdomen', equipment: 'solo', calories_per_min: 5},
+    
+    // Outdoor exercises
+    {id: 19, name: 'Corrida', category: 'outdoor', muscle: 'cardio', equipment: 'nenhum', calories_per_min: 12},
+    {id: 20, name: 'Caminhada Rápida', category: 'outdoor', muscle: 'cardio', equipment: 'nenhum', calories_per_min: 6},
+    {id: 21, name: 'Ciclismo', category: 'outdoor', muscle: 'pernas', equipment: 'bicicleta', calories_per_min: 10},
+    {id: 22, name: 'Natação', category: 'outdoor', muscle: 'full_body', equipment: 'piscina', calories_per_min: 11},
+    {id: 23, name: 'Pular Corda', category: 'outdoor', muscle: 'cardio', equipment: 'corda', calories_per_min: 13},
+    {id: 24, name: 'Burpees', category: 'outdoor', muscle: 'full_body', equipment: 'nenhum', calories_per_min: 14},
+    {id: 25, name: 'Flexões', category: 'outdoor', muscle: 'peito', equipment: 'nenhum', calories_per_min: 8},
+    {id: 26, name: 'Barra Fixa', category: 'outdoor', muscle: 'costas', equipment: 'barra', calories_per_min: 7},
+    {id: 27, name: 'Agachamento ao Ar Livre', category: 'outdoor', muscle: 'pernas', equipment: 'nenhum', calories_per_min: 9},
+    {id: 28, name: 'Corrida de Escadas', category: 'outdoor', muscle: 'pernas', equipment: 'nenhum', calories_per_min: 15},
+];
+
 // State
 let currentUser = null;
 let currentDate = new Date();
@@ -41,12 +76,19 @@ let currentCategory = 'all';
 let customFoods = [];
 let waterReminderEnabled = false;
 let waterReminderTime = '09:00';
+let profilePhoto = null;
+let customExercises = [];
+let exerciseLog = {};
+let currentFoodPhoto = null;
 
 // Initialize
 function init() {
     loadUserData();
     loadCustomFoods();
     loadWaterReminderSettings();
+    loadProfilePhoto();
+    loadCustomExercises();
+    loadExerciseLog();
     if (currentUser) {
         showScreen('dashboard');
         updateDashboard();
@@ -178,10 +220,245 @@ function toggleWaterReminder(enabled, time) {
     waterReminderEnabled = enabled;
     waterReminderTime = time;
     saveWaterReminderSettings();
-    
+
     if (enabled) {
         requestNotificationPermission();
     }
+}
+
+// Profile Photo Functions
+function loadProfilePhoto() {
+    const photoData = localStorage.getItem('nutriela_profile_photo');
+    if (photoData) {
+        profilePhoto = photoData;
+    }
+}
+
+function saveProfilePhoto() {
+    if (profilePhoto) {
+        localStorage.setItem('nutriela_profile_photo', profilePhoto);
+    }
+}
+
+function handleProfilePhotoUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            profilePhoto = e.target.result;
+            saveProfilePhoto();
+            updateProfile();
+            updateDashboard();
+            alert('Foto de perfil atualizada com sucesso!');
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function handleFoodPhotoUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            currentFoodPhoto = e.target.result;
+            const preview = document.getElementById('foodPhotoPreview');
+            const img = document.getElementById('foodPhotoImg');
+            if (preview && img) {
+                preview.style.display = 'block';
+                img.src = currentFoodPhoto;
+            }
+            alert('Foto do alimento carregada com sucesso!');
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// Exercise Functions
+function loadCustomExercises() {
+    const exerciseData = localStorage.getItem('nutriela_custom_exercises');
+    if (exerciseData) {
+        customExercises = JSON.parse(exerciseData);
+    }
+}
+
+function saveCustomExercises() {
+    localStorage.setItem('nutriela_custom_exercises', JSON.stringify(customExercises));
+}
+
+function loadExerciseLog() {
+    const logData = localStorage.getItem('nutriela_exercise_log');
+    if (logData) {
+        exerciseLog = JSON.parse(logData);
+    }
+}
+
+function saveExerciseLog() {
+    localStorage.setItem('nutriela_exercise_log', JSON.stringify(exerciseLog));
+}
+
+function getAllExercises() {
+    return [...EXERCISE_DATABASE, ...customExercises];
+}
+
+function addCustomExercise(exercise) {
+    const newId = Math.max(...EXERCISE_DATABASE.map(e => e.id), ...customExercises.map(e => e.id), 0) + 1;
+    customExercises.push({
+        ...exercise,
+        id: newId,
+        custom: true
+    });
+    saveCustomExercises();
+}
+
+function deleteCustomExercise(exerciseId) {
+    customExercises = customExercises.filter(e => e.id !== exerciseId);
+    saveCustomExercises();
+}
+
+function logExercise(exerciseId, duration, sets, reps, weight) {
+    const dateStr = currentDate.toISOString().split('T')[0];
+    if (!exerciseLog[dateStr]) {
+        exerciseLog[dateStr] = [];
+    }
+    
+    const exercise = getAllExercises().find(e => e.id === exerciseId);
+    const caloriesBurned = exercise.calories_per_min * duration;
+    
+    exerciseLog[dateStr].push({
+        exercise_id: exerciseId,
+        exercise_name: exercise.name,
+        duration: duration,
+        sets: sets,
+        reps: reps,
+        weight: weight,
+        calories_burned: caloriesBurned,
+        timestamp: new Date().toISOString()
+    });
+    
+    saveExerciseLog();
+}
+
+function getExercisesForDate(dateStr) {
+    return exerciseLog[dateStr] || [];
+}
+
+// Exercise UI Functions
+function renderExerciseList() {
+    const container = document.getElementById('exerciseList');
+    if (!container) return;
+    
+    const dateStr = currentDate.toISOString().split('T')[0];
+    const exercises = getExercisesForDate(dateStr);
+    
+    if (exercises.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #888; padding: 20px;">Nenhum exercício registrado hoje</p>';
+        return;
+    }
+    
+    container.innerHTML = exercises.map(exercise => `
+        <div class="meal-item">
+            <div>
+                <strong>${exercise.exercise_name}</strong>
+                <div style="font-size: 12px; color: #888;">
+                    ${exercise.duration} min • ${exercise.sets}x${exercise.reps || '-'} ${exercise.weight ? `• ${exercise.weight}kg` : ''}
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-weight: bold; color: #f6ad55;">${exercise.calories_burned.toFixed(0)} kcal</div>
+            </div>
+        </div>
+    `).join('');
+    
+    // Update total calories burned
+    const totalBurned = exercises.reduce((sum, e) => sum + e.calories_burned, 0);
+    const totalEl = document.getElementById('totalCaloriesBurned');
+    if (totalEl) {
+        totalEl.textContent = totalBurned.toFixed(0);
+    }
+    
+    // Update exercise date
+    const dateEl = document.getElementById('exerciseDate');
+    if (dateEl) {
+        dateEl.textContent = formatDate(currentDate);
+    }
+}
+
+function renderExerciseSelect() {
+    const select = document.getElementById('exerciseSelect');
+    if (!select) return;
+    
+    const allExercises = getAllExercises();
+    select.innerHTML = '<option value="">Escolha um exercício...</option>' + 
+        allExercises.map(exercise => `
+            <option value="${exercise.id}">${exercise.name} (${exercise.category === 'gym' ? 'Academia' : 'Ar Livre'}) - ${exercise.calories_per_min} kcal/min</option>
+        `).join('');
+}
+
+function renderCustomExercisesList() {
+    const container = document.getElementById('customExercisesList');
+    if (!container) return;
+    
+    if (customExercises.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #888; padding: 20px;">Nenhum exercício personalizado cadastrado</p>';
+        return;
+    }
+    
+    container.innerHTML = customExercises.map(exercise => `
+        <div class="meal-item">
+            <div>
+                <strong>${exercise.name}</strong>
+                <div style="font-size: 12px; color: #888;">
+                    ${exercise.category === 'gym' ? 'Academia' : 'Ar Livre'} • ${exercise.muscle} • ${exercise.equipment}
+                </div>
+            </div>
+            <button onclick="deleteCustomExercise(${exercise.id})" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px; width: auto;">🗑️</button>
+        </div>
+    `).join('');
+}
+
+function handleLogExercise(event) {
+    event.preventDefault();
+    
+    const exerciseId = parseInt(document.getElementById('exerciseSelect').value);
+    const duration = parseFloat(document.getElementById('exerciseDuration').value);
+    const sets = parseInt(document.getElementById('exerciseSets').value) || 0;
+    const reps = parseInt(document.getElementById('exerciseReps').value) || 0;
+    const weight = parseFloat(document.getElementById('exerciseWeight').value) || 0;
+    
+    logExercise(exerciseId, duration, sets, reps, weight);
+    
+    // Clear form
+    document.getElementById('exerciseSelect').value = '';
+    document.getElementById('exerciseDuration').value = '';
+    document.getElementById('exerciseSets').value = '';
+    document.getElementById('exerciseReps').value = '';
+    document.getElementById('exerciseWeight').value = '';
+    
+    alert('Exercício registrado com sucesso!');
+    showScreen('exercises');
+}
+
+function handleAddCustomExercise(event) {
+    event.preventDefault();
+    
+    const newExercise = {
+        name: document.getElementById('customExerciseName').value,
+        category: document.getElementById('customExerciseCategory').value,
+        muscle: document.getElementById('customExerciseMuscle').value,
+        equipment: document.getElementById('customExerciseEquipment').value,
+        calories_per_min: parseFloat(document.getElementById('customExerciseCalories').value)
+    };
+    
+    addCustomExercise(newExercise);
+    renderCustomExercisesList();
+    
+    // Clear form
+    document.getElementById('customExerciseName').value = '';
+    document.getElementById('customExerciseEquipment').value = '';
+    document.getElementById('customExerciseCalories').value = '';
+    
+    alert('Exercício adicionado com sucesso!');
+    showScreen('exercises');
 }
 
 // Nutritional Calculations
@@ -268,6 +545,12 @@ function showScreen(screenName) {
         document.getElementById('editActivity').value = currentUser.activity_level;
         document.getElementById('waterReminderEnabled').checked = waterReminderEnabled;
         document.getElementById('waterReminderTime').value = waterReminderTime;
+    } else if (screenName === 'exercises') {
+        renderExerciseList();
+    } else if (screenName === 'logExercise') {
+        renderExerciseSelect();
+    } else if (screenName === 'addCustomExercise') {
+        renderCustomExercisesList();
     }
 }
 
@@ -301,9 +584,15 @@ function updateDashboard() {
     document.getElementById('dashboardUserName').textContent = currentUser.name;
     document.getElementById('dashboardUserInfo').textContent = `${currentUser.age} anos • ${currentUser.gender === 'male' ? 'Masculino' : 'Feminino'}`;
     document.getElementById('dashboardWeight').textContent = currentUser.weight.toFixed(1);
-    
+
     const bmi = calculateBMI(currentUser);
     document.getElementById('dashboardBMI').textContent = bmi.toFixed(1);
+
+    // Update profile photo
+    const profilePhotoElement = document.getElementById('dashboardProfilePhoto');
+    if (profilePhoto) {
+        profilePhotoElement.innerHTML = `<img src="${profilePhoto}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">`;
+    }
     
     const meals = getMealsForDate(dateStr);
     const waterIntake = getWaterForDate(dateStr);
@@ -414,7 +703,7 @@ function renderFoodGrid() {
     const allFoods = getAllFoods();
     container.innerHTML = allFoods.map(food => `
         <div class="food-card ${food.custom ? 'custom-food' : ''}" data-food-id="${food.id}" data-category="${food.category}" data-name="${food.name.toLowerCase()}" onclick="toggleFood(${food.id})">
-            <div class="food-emoji">${food.emoji || '🍽️'}</div>
+            <div class="food-emoji">${food.photo ? `<img src="${food.photo}" alt="${food.name}" style="width: 36px; height: 36px; object-fit: cover; border-radius: 5px;">` : (food.emoji || '🍽️')}</div>
             <div class="food-name">${food.name} ${food.custom ? '✨' : ''}</div>
             <div class="food-info">${food.calories} kcal/100g</div>
         </div>
@@ -544,16 +833,22 @@ function saveMeal() {
 // Profile
 function updateProfile() {
     if (!currentUser) return;
-    
+
     document.getElementById('profileName').textContent = currentUser.name;
     document.getElementById('profileInfo').textContent = `${currentUser.age} anos • ${currentUser.gender === 'male' ? 'Masculino' : 'Feminino'}`;
-    
+
+    // Update profile photo
+    const profilePhotoContainer = document.getElementById('profilePhotoContainer');
+    if (profilePhoto) {
+        profilePhotoContainer.innerHTML = `<img src="${profilePhoto}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">`;
+    }
+
     document.getElementById('profileWeight').textContent = currentUser.weight;
     document.getElementById('profileHeight').textContent = currentUser.height;
-    
+
     const bmi = calculateBMI(currentUser);
     document.getElementById('profileBMI').textContent = bmi.toFixed(1);
-    
+
     const bmiStatus = getBMIStatus(bmi);
     const bmiEl = document.getElementById('bmiStatus');
     bmiEl.textContent = bmiStatus;
@@ -562,11 +857,11 @@ function updateProfile() {
     bmiEl.style.display = 'inline-block';
     bmiEl.style.color = 'white';
     bmiEl.style.background = bmiStatus === 'Normal' ? '#48bb78' : bmiStatus === 'Abaixo do peso' || bmiStatus === 'Sobrepeso' ? '#f6ad55' : '#f56565';
-    
+
     const calorieGoal = calculateCalorieGoal(currentUser);
     const macroGoals = calculateMacroGoals(currentUser);
     const waterGoal = calculateWaterGoal(currentUser);
-    
+
     document.getElementById('profileCalorieGoal').textContent = Math.round(calorieGoal);
     document.getElementById('profileProteinGoal').textContent = macroGoals.protein.toFixed(1);
     document.getElementById('profileCarbsGoal').textContent = macroGoals.carbs.toFixed(1);
@@ -643,13 +938,14 @@ function handleAddCustomFood(event) {
         carbs: parseFloat(document.getElementById('customFoodCarbs').value),
         fat: parseFloat(document.getElementById('customFoodFat').value),
         emoji: document.getElementById('customFoodEmoji').value || '🍽️',
-        serving_size: parseFloat(document.getElementById('customFoodServingSize').value) || 100
+        serving_size: parseFloat(document.getElementById('customFoodServingSize').value) || 100,
+        photo: currentFoodPhoto || null
     };
     
     addCustomFood(newFood);
     renderFoodGrid();
     
-    // Clear form
+    // Clear form and reset photo
     document.getElementById('customFoodName').value = '';
     document.getElementById('customFoodCalories').value = '';
     document.getElementById('customFoodProtein').value = '';
@@ -657,6 +953,7 @@ function handleAddCustomFood(event) {
     document.getElementById('customFoodFat').value = '';
     document.getElementById('customFoodEmoji').value = '';
     document.getElementById('customFoodServingSize').value = '100';
+    currentFoodPhoto = null;
     
     alert('Alimento adicionado com sucesso!');
     showScreen('addMeal');

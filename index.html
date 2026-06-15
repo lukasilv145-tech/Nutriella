@@ -487,6 +487,7 @@
             <div class="nav">
                 <button onclick="showScreen('dashboard')" id="navDashboard">📊</button>
                 <button onclick="showScreen('profile')" id="navProfile">👤</button>
+                <button onclick="showScreen('exercises')" id="navExercises">💪</button>
                 <button onclick="showScreen('addCustomFood')" id="navAddFood">➕🍽️</button>
                 <button onclick="showScreen('settings')" id="navSettings">⚙️</button>
                 <button onclick="resetData()" id="navReset">🔄</button>
@@ -561,7 +562,9 @@
             <!-- User Info Card -->
             <div class="card" style="background: linear-gradient(135deg, #4a1a6b 0%, #5c2d8a 50%, #7b4397 100%); color: white; border: 1px solid #9b5397;">
                 <div style="display: flex; align-items: center; gap: 15px;">
-                    <div style="font-size: 50px;">👤</div>
+                    <div id="dashboardProfilePhoto" style="width: 60px; height: 60px; border-radius: 50%; background: #2d2d5a; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #7b4397;">
+                        <span style="font-size: 30px;">👤</span>
+                    </div>
                     <div style="flex: 1;">
                         <h2 style="color: white; margin: 0; font-size: 20px;" id="dashboardUserName"></h2>
                         <p style="margin: 5px 0; opacity: 0.9; font-size: 14px;" id="dashboardUserInfo"></p>
@@ -705,9 +708,18 @@
         <div id="profileScreen" class="screen">
             <div class="card">
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <div style="font-size: 60px;">👤</div>
+                    <div id="profilePhotoContainer" style="width: 100px; height: 100px; border-radius: 50%; background: #2d2d5a; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; overflow: hidden; border: 3px solid #7b4397;">
+                        <span style="font-size: 50px;">👤</span>
+                    </div>
                     <h2 style="color: #667eea; margin-top: 10px;" id="profileName"></h2>
                     <p style="color: #666;" id="profileInfo"></p>
+                    
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label for="profilePhotoInput" class="btn btn-primary" style="cursor: pointer; display: inline-block; width: auto; padding: 10px 20px;">
+                            📷 Alterar Foto de Perfil
+                        </label>
+                        <input type="file" id="profilePhotoInput" accept="image/*" onchange="handleProfilePhotoUpload(event)" style="display: none;">
+                    </div>
                 </div>
                 
                 <h3 style="margin-bottom: 15px; color: #667eea;">📏 Medidas Corporais</h3>
@@ -824,6 +836,16 @@
                         <input type="text" id="customFoodEmoji" placeholder="Ex: 🍚" maxlength="2">
                     </div>
                     
+                    <div class="form-group">
+                        <label for="foodPhotoInput" class="btn btn-success" style="cursor: pointer; display: inline-block; width: auto; padding: 10px 20px;">
+                            📷 Adicionar Foto do Alimento
+                        </label>
+                        <input type="file" id="foodPhotoInput" accept="image/*" onchange="handleFoodPhotoUpload(event)" style="display: none;">
+                        <div id="foodPhotoPreview" style="margin-top: 10px; display: none;">
+                            <img id="foodPhotoImg" src="" alt="Preview" style="max-width: 100px; max-height: 100px; border-radius: 10px;">
+                        </div>
+                    </div>
+                    
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                         <div class="form-group">
                             <label>Calorias (kcal/100g)</label>
@@ -863,6 +885,141 @@
             <div class="card">
                 <h3>📋 Meus Alimentos Personalizados</h3>
                 <div id="customFoodsList"></div>
+            </div>
+        </div>
+        
+        <!-- Exercises Screen -->
+        <div id="exercisesScreen" class="screen">
+            <div class="card">
+                <h2>💪 Exercícios</h2>
+                
+                <div class="date-nav">
+                    <button onclick="changeDate(-1)">◀</button>
+                    <span id="exerciseDate"></span>
+                    <button onclick="changeDate(1)">▶</button>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <button onclick="showScreen('logExercise')" class="btn btn-primary" style="flex: 1;">
+                        ➕ Registrar Exercício
+                    </button>
+                    <button onclick="showScreen('addCustomExercise')" class="btn btn-success" style="flex: 1;">
+                        ➕ Novo Exercício
+                    </button>
+                </div>
+                
+                <h3 style="margin-bottom: 15px;">Exercícios do Dia</h3>
+                <div id="exerciseList"></div>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 15px;">🔥 Calorias Queimadas Hoje</h3>
+                <div style="text-align: center;">
+                    <div style="font-size: 36px; font-weight: bold; color: #f6ad55;" id="totalCaloriesBurned">0</div>
+                    <div style="font-size: 14px; color: #888;">kcal</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Log Exercise Screen -->
+        <div id="logExerciseScreen" class="screen">
+            <div class="card">
+                <h2>➕ Registrar Exercício</h2>
+                
+                <form onsubmit="handleLogExercise(event)">
+                    <div class="form-group">
+                        <label>Selecione o Exercício</label>
+                        <select id="exerciseSelect" required>
+                            <option value="">Escolha um exercício...</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Duração (minutos)</label>
+                        <input type="number" id="exerciseDuration" required min="1" placeholder="30">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Séries</label>
+                        <input type="number" id="exerciseSets" min="1" placeholder="3">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Repetições</label>
+                        <input type="number" id="exerciseReps" min="1" placeholder="12">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Peso (kg) - Opcional</label>
+                        <input type="number" id="exerciseWeight" min="0" step="0.5" placeholder="20">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        Registrar Exercício 💪
+                    </button>
+                    <button type="button" onclick="showScreen('exercises')" class="btn btn-danger" style="margin-top: 10px;">
+                        Cancelar
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Add Custom Exercise Screen -->
+        <div id="addCustomExerciseScreen" class="screen">
+            <div class="card">
+                <h2>➕ Cadastrar Exercício Personalizado</h2>
+                
+                <form onsubmit="handleAddCustomExercise(event)">
+                    <div class="form-group">
+                        <label>Nome do Exercício</label>
+                        <input type="text" id="customExerciseName" required placeholder="Ex: Rosca Scott">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select id="customExerciseCategory" required>
+                            <option value="gym">Academia</option>
+                            <option value="outdoor">Ar Livre</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Músculo Principal</label>
+                        <select id="customExerciseMuscle" required>
+                            <option value="peito">Peito</option>
+                            <option value="costas">Costas</option>
+                            <option value="pernas">Pernas</option>
+                            <option value="ombros">Ombros</option>
+                            <option value="bíceps">Bíceps</option>
+                            <option value="tríceps">Tríceps</option>
+                            <option value="abdomen">Abdomen</option>
+                            <option value="cardio">Cardio</option>
+                            <option value="full_body">Corpo Inteiro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Equipamento</label>
+                        <input type="text" id="customExerciseEquipment" required placeholder="Ex: Barra, Halteres, Máquina">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Calorias por Minuto</label>
+                        <input type="number" id="customExerciseCalories" required min="1" step="0.1" placeholder="8">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        Adicionar Exercício ✨
+                    </button>
+                    <button type="button" onclick="showScreen('exercises')" class="btn btn-danger" style="margin-top: 10px;">
+                        Cancelar
+                    </button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h3>📋 Meus Exercícios Personalizados</h3>
+                <div id="customExercisesList"></div>
             </div>
         </div>
         
