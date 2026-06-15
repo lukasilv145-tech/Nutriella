@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="date-nav">
+    <button onclick="changeDate(-1)">◀ Anterior</button>
+    <h3>{{ selected_date.strftime('%d/%m/%Y') }}</h3>
+    <button onclick="changeDate(1)">Próximo ▶</button>
+</div>
+
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-value" style="color: #f6ad55;">{{ total_calories|round(0) }}</div>
+        <div class="stat-label">Calorias (kcal)</div>
+        <div style="font-size: 12px; color: #999;">Meta: {{ calorie_goal|round(0) }}</div>
+        <div class="progress-bar" style="margin-top: 10px;">
+            <div class="progress-fill" style="width: {{ (total_calories/calorie_goal * 100)|round(0) }}%; background: #f6ad55;"></div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-value" style="color: #f56565;">{{ total_protein|round(1) }}</div>
+        <div class="stat-label">Proteína (g)</div>
+        <div style="font-size: 12px; color: #999;">Meta: {{ macro_goals.protein|round(1) }}</div>
+        <div class="progress-bar" style="margin-top: 10px;">
+            <div class="progress-fill" style="width: {{ (total_protein/macro_goals.protein * 100)|round(0) }}%; background: #f56565;"></div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-value" style="color: #4299e1;">{{ total_carbs|round(1) }}</div>
+        <div class="stat-label">Carboidratos (g)</div>
+        <div style="font-size: 12px; color: #999;">Meta: {{ macro_goals.carbs|round(1) }}</div>
+        <div class="progress-bar" style="margin-top: 10px;">
+            <div class="progress-fill" style="width: {{ (total_carbs/macro_goals.carbs * 100)|round(0) }}%; background: #4299e1;"></div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-value" style="color: #ecc94b;">{{ total_fat|round(1) }}</div>
+        <div class="stat-label">Gorduras (g)</div>
+        <div style="font-size: 12px; color: #999;">Meta: {{ macro_goals.fat|round(1) }}</div>
+        <div class="progress-bar" style="margin-top: 10px;">
+            <div class="progress-fill" style="width: {{ (total_fat/macro_goals.fat * 100)|round(0) }}%; background: #ecc94b;"></div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-value" style="color: #0bc5ea;">{{ (total_water/1000)|round(1) }}</div>
+        <div class="stat-label">Água (L)</div>
+        <div style="font-size: 12px; color: #999;">Meta: {{ (water_goal/1000)|round(1) }}</div>
+        <div class="progress-bar" style="margin-top: 10px;">
+            <div class="progress-fill" style="width: {{ (total_water/water_goal * 100)|round(0) }}%; background: #0bc5ea;"></div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3 style="margin-bottom: 20px;">Ações Rápidas</h3>
+    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <a href="{{ url_for('add_meal', date=selected_date.isoformat()) }}" class="btn btn-primary">
+            ➕ Adicionar Refeição
+        </a>
+        <form method="POST" action="{{ url_for('add_water') }}" style="display: inline;">
+            <input type="hidden" name="date" value="{{ selected_date.isoformat() }}">
+            <button type="submit" class="btn btn-success">💧 +250ml Água</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <h3 style="margin-bottom: 20px;">Refeições do Dia</h3>
+    {% if meals %}
+        {% for meal in meals %}
+        <div class="meal-item">
+            <div>
+                <strong>{{ {'breakfast': 'Café da Manhã', 'lunch': 'Almoço', 'dinner': 'Jantar', 'snack': 'Lanche'}[meal.type] }}</strong>
+                <div style="font-size: 14px; color: #666;">
+                    {% set items = meal.items|from_json %}
+                    {% for item in items %}
+                        {{ item.food_name }} ({{ item.grams|round(0) }}g)
+                        {% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-weight: bold; color: #667eea;">
+                    {% set meal_calories = items|sum(attribute='calories') %}
+                    {{ meal_calories|round(0) }} kcal
+                </div>
+                <div style="font-size: 12px; color: #999;">{{ items|length }} itens</div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align: center; color: #999; padding: 20px;">
+            Nenhuma refeição registrada hoje
+        </p>
+    {% endif %}
+</div>
+
+<script>
+    function changeDate(days) {
+        const currentDate = new Date('{{ selected_date.isoformat() }}');
+        currentDate.setDate(currentDate.getDate() + days);
+        const newDate = currentDate.toISOString().split('T')[0];
+        window.location.href = `/?date=${newDate}`;
+    }
+</script>
+{% endblock %}
