@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Raven's hood - more pointed top -->
+  <path d="M50 5 L35 25 L25 45 L25 70 L35 85 L35 95 L65 95 L65 85 L75 70 L75 45 L65 25 Z" fill="#4a1a6b" stroke="#2d0f4a" stroke-width="2"/>
+  
+  <!-- Hood inner lighter purple -->
+  <path d="M50 8 L38 26 L30 45 L30 68 L38 80 L38 90 L62 90 L62 80 L70 68 L70 45 L62 26 Z" fill="#5c2d8a"/>
+  
+  <!-- Hood top point detail -->
+  <path d="M50 5 L45 15 L55 15 Z" fill="#7b4397"/>
+  
+  <!-- Face opening - more angular like Raven's -->
+  <path d="M35 40 Q50 35 65 40 L65 65 Q50 70 35 65 Z" fill="#3a1252" stroke="#2d0f4a" stroke-width="1"/>
+  
+  <!-- Red hair strands - more prominent and flowing -->
+  <path d="M32 68 Q20 80 15 95" stroke="#ff4444" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M68 68 Q80 80 85 95" stroke="#ff4444" stroke-width="5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Additional red hair strands -->
+  <path d="M28 72 Q18 82 12 92" stroke="#cc3333" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M72 72 Q82 82 88 92" stroke="#cc3333" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Hood rim/edge detail -->
+  <path d="M30 65 Q50 70 70 65" stroke="#7b4397" stroke-width="2" fill="none"/>
+  
+  <!-- Hood side folds -->
+  <path d="M38 30 L38 60" stroke="#3a1252" stroke-width="1" fill="none" opacity="0.5"/>
+  <path d="M62 30 L62 60" stroke="#3a1252" stroke-width="1" fill="none" opacity="0.5"/>
+</svg>
