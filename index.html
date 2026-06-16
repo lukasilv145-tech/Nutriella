@@ -99,6 +99,7 @@
             font-weight: bold;
             transition: transform 0.2s;
             width: 100%;
+            color: white;
         }
         
         .btn:active {
@@ -217,7 +218,8 @@
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s;
-            border: 2px solid transparent;
+            border: 3px solid transparent;
+            position: relative;
         }
 
         .food-card:hover {
@@ -227,11 +229,26 @@
         .food-card.selected {
             border-color: #7b4397;
             background: #3d3d6a;
+            box-shadow: 0 0 15px rgba(123, 67, 151, 0.5);
+        }
+
+        .food-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            font-size: 24px;
+            color: #7b4397;
+            font-weight: bold;
         }
         
         .food-emoji {
-            font-size: 36px;
+            font-size: 48px;
             text-align: center;
+            min-height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .food-name {
@@ -299,6 +316,114 @@
         .date-nav button:hover {
             background: #3d3d6a;
         }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin: 20px 0;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            cursor: pointer;
+            border: 1px solid #3d3d6a;
+            transition: all 0.3s;
+        }
+
+        .calendar-day:hover {
+            transform: scale(1.05);
+        }
+
+        .calendar-day.red {
+            background: #7a3d3d;
+            color: #fff;
+        }
+
+        .calendar-day.orange {
+            background: #7a5c3d;
+            color: #fff;
+        }
+
+        .calendar-day.yellow {
+            background: #7a7a3d;
+            color: #fff;
+        }
+
+        .calendar-day.light-green {
+            background: #5a7a3d;
+            color: #fff;
+        }
+
+        .calendar-day.green {
+            background: #3d7a4d;
+            color: #fff;
+        }
+
+        .calendar-day.day-number {
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .exercise-card {
+            background: #2d2d5a;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 2px solid #3d3d6a;
+            transition: all 0.3s;
+        }
+
+        .exercise-card:hover {
+            border-color: #7b4397;
+            box-shadow: 0 0 15px rgba(123, 67, 151, 0.3);
+        }
+
+        .exercise-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .exercise-card-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #a78bfa;
+        }
+
+        .exercise-card-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .exercise-stat {
+            background: #1e1e3f;
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #2d2d5a;
+        }
+
+        .exercise-stat-label {
+            font-size: 10px;
+            color: #888;
+        }
+
+        .exercise-stat-value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #f6ad55;
+            margin-top: 4px;
+        }
         
         .hidden {
             display: none !important;
@@ -323,10 +448,22 @@
             margin-bottom: 15px;
         }
         
+        .input-grams-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .input-grams {
-            width: 70px !important;
+            width: 80px !important;
             padding: 8px !important;
             font-size: 14px !important;
+        }
+
+        .grams-label {
+            color: #888;
+            font-size: 12px;
+            font-weight: bold;
         }
         
         .selected-foods-card {
@@ -336,7 +473,7 @@
         .total-calories {
             font-size: 18px;
             font-weight: bold;
-            color: #667eea;
+            color: #f6ad55;
         }
 
         .custom-food {
@@ -424,7 +561,8 @@
             }
             
             .food-emoji {
-                font-size: 30px;
+                font-size: 40px;
+                min-height: 48px;
             }
             
             .food-name {
@@ -453,26 +591,12 @@
                 font-size: 14px;
             }
             
-            /* User info card on mobile */
-            .card[style*="linear-gradient"] {
-                padding: 15px;
+            .calendar-grid {
+                gap: 6px;
             }
-            
-            .card[style*="linear-gradient"] > div:first-child {
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
-            }
-            
-            .card[style*="linear-gradient"] > div:last-child {
-                flex-direction: column;
-                gap: 10px;
-                align-items: center;
-            }
-            
-            .card[style*="linear-gradient"] button {
-                width: 100%;
-                font-size: 14px;
+
+            .calendar-day {
+                font-size: 10px;
             }
         }
     </style>
@@ -484,7 +608,7 @@
                 <img src="logo-transparent.png" alt="Nutriela Logo">
                 Nutriela
             </div>
-            <div class="nav">
+            <div class="nav" id="navButtons" style="display: none;">
                 <button onclick="showScreen('dashboard')" id="navDashboard">📊</button>
                 <button onclick="showScreen('profile')" id="navProfile">👤</button>
                 <button onclick="showScreen('exercises')" id="navExercises">💪</button>
@@ -498,7 +622,7 @@
         <div id="registerScreen" class="screen active">
             <div class="card">
                 <h2>👤 Cadastro</h2>
-                <p style="text-align: center; margin-bottom: 20px; color: #666;">Vamos conhecer você!</p>
+                <p style="text-align: center; margin-bottom: 20px; color: #a78bfa;">Vamos conhecer você! Complete o cadastro para usar o app.</p>
                 
                 <form onsubmit="handleRegister(event)">
                     <div class="form-group">
@@ -562,7 +686,7 @@
             <!-- User Info Card -->
             <div class="card" style="background: linear-gradient(135deg, #4a1a6b 0%, #5c2d8a 50%, #7b4397 100%); color: white; border: 1px solid #9b5397;">
                 <div style="display: flex; align-items: center; gap: 15px;">
-                    <div id="dashboardProfilePhoto" style="width: 60px; height: 60px; border-radius: 50%; background: #2d2d5a; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #7b4397;">
+                    <div id="dashboardProfilePhoto" style="width: 60px; height: 60px; border-radius: 50%; background: #2d2d5a; display: flex; align-items: center; justify-content: center; overflow: hidden;">
                         <span style="font-size: 30px;">👤</span>
                     </div>
                     <div style="flex: 1;">
@@ -580,14 +704,20 @@
                         <strong style="font-size: 18px;" id="dashboardWeight">0</strong>
                         <span style="font-size: 12px;">kg</span>
                     </div>
-                    <button onclick="showScreen('updateWeight')" class="btn" style="background: #1e1e3f; color: #a78bfa; padding: 8px 16px; font-size: 14px; width: auto; border: 1px solid #7b4397;">Atualizar Peso</button>
+                    <button onclick="showScreen('updateWeight')" class="btn" style="background: #1e1e3f; color: #a78bfa; padding: 8px 16px; font-size: 14px; width: auto; border: 1px solid #7b4397;">Atualizar</button>
                 </div>
             </div>
             
             <div class="date-nav">
                 <button onclick="changeDate(-1)">◀</button>
-                <span id="currentDate"></span>
+                <span id="currentDate" style="color: #a78bfa; font-weight: bold;"></span>
                 <button onclick="changeDate(1)">▶</button>
+            </div>
+            
+            <!-- Calendário com escala de cores -->
+            <div class="card">
+                <h3>📅 Seu Progresso no Mês</h3>
+                <div class="calendar-grid" id="calendarGrid"></div>
             </div>
             
             <div class="stat-grid">
@@ -708,11 +838,11 @@
         <div id="profileScreen" class="screen">
             <div class="card">
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <div id="profilePhotoContainer" style="width: 100px; height: 100px; border-radius: 50%; background: #2d2d5a; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; overflow: hidden; border: 3px solid #7b4397;">
+                    <div id="profilePhotoContainer" style="width: 100px; height: 100px; border-radius: 50%; background: #2d2d5a; display: flex; align-items: center; justify-content: center; margin: 0 auto; overflow: hidden;">
                         <span style="font-size: 50px;">👤</span>
                     </div>
-                    <h2 style="color: #667eea; margin-top: 10px;" id="profileName"></h2>
-                    <p style="color: #666;" id="profileInfo"></p>
+                    <h2 style="color: #a78bfa; margin-top: 10px;" id="profileName"></h2>
+                    <p style="color: #888;" id="profileInfo"></p>
                     
                     <div class="form-group" style="margin-top: 15px;">
                         <label for="profilePhotoInput" class="btn btn-primary" style="cursor: pointer; display: inline-block; width: auto; padding: 10px 20px;">
@@ -722,7 +852,7 @@
                     </div>
                 </div>
                 
-                <h3 style="margin-bottom: 15px; color: #667eea;">📏 Medidas Corporais</h3>
+                <h3 style="margin-bottom: 15px; color: #a78bfa;">📏 Medidas Corporais</h3>
                 <div class="stat-grid" style="margin-bottom: 20px;">
                     <div class="stat-card">
                         <div class="stat-value" id="profileWeight">0</div>
@@ -739,7 +869,7 @@
                     </div>
                 </div>
                 
-                <h3 style="margin-bottom: 15px; color: #667eea;">🎯 Metas Diárias</h3>
+                <h3 style="margin-bottom: 15px; color: #a78bfa;">🎯 Metas Diárias</h3>
                 <div class="stat-grid" style="margin-bottom: 20px;">
                     <div class="stat-card">
                         <div class="stat-value" style="color: #f6ad55;" id="profileCalorieGoal">0</div>
@@ -763,23 +893,23 @@
                     </div>
                 </div>
                 
-                <h3 style="margin-bottom: 15px; color: #667eea;">⚡ Informações Metabólicas</h3>
-                <div class="card" style="background: #f8f9fa;">
+                <h3 style="margin-bottom: 15px; color: #a78bfa;">⚡ Informações Metabólicas</h3>
+                <div class="card" style="background: #1e1e3f;">
                     <div class="meal-item">
-                        <span>TMB</span>
-                        <strong id="profileBMR">0 kcal</strong>
+                        <span style="color: #a78bfa;">TMB</span>
+                        <strong style="color: #e0e0e0;" id="profileBMR">0 kcal</strong>
                     </div>
                     <div class="meal-item">
-                        <span>TDEE</span>
-                        <strong id="profileTDEE">0 kcal</strong>
+                        <span style="color: #a78bfa;">TDEE</span>
+                        <strong style="color: #e0e0e0;" id="profileTDEE">0 kcal</strong>
                     </div>
                     <div class="meal-item">
-                        <span>Objetivo</span>
-                        <strong id="profileGoal"></strong>
+                        <span style="color: #a78bfa;">Objetivo</span>
+                        <strong style="color: #e0e0e0;" id="profileGoal"></strong>
                     </div>
                     <div class="meal-item">
-                        <span>Atividade</span>
-                        <strong id="profileActivity"></strong>
+                        <span style="color: #a78bfa;">Atividade</span>
+                        <strong style="color: #e0e0e0;" id="profileActivity"></strong>
                     </div>
                 </div>
             </div>
@@ -789,7 +919,7 @@
         <div id="updateWeightScreen" class="screen">
             <div class="card">
                 <h2>⚖️ Atualizar Peso</h2>
-                <p style="text-align: center; margin-bottom: 20px; color: #666;">Mantenha seu peso atualizado para cálculos precisos!</p>
+                <p style="text-align: center; margin-bottom: 20px; color: #a78bfa;">Mantenha seu peso atualizado para cálculos precisos!</p>
                 
                 <form onsubmit="handleUpdateWeight(event)">
                     <div class="form-group">
@@ -811,7 +941,7 @@
         <div id="addCustomFoodScreen" class="screen">
             <div class="card">
                 <h2>➕🍽️ Cadastrar Alimento</h2>
-                <p style="text-align: center; margin-bottom: 20px; color: #666;">Adicione seus próprios alimentos ao banco de dados!</p>
+                <p style="text-align: center; margin-bottom: 20px; color: #a78bfa;">Adicione seus próprios alimentos ao banco de dados!</p>
                 
                 <form onsubmit="handleAddCustomFood(event)">
                     <div class="form-group">
@@ -895,7 +1025,7 @@
                 
                 <div class="date-nav">
                     <button onclick="changeDate(-1)">◀</button>
-                    <span id="exerciseDate"></span>
+                    <span id="exerciseDate" style="color: #a78bfa; font-weight: bold;"></span>
                     <button onclick="changeDate(1)">▶</button>
                 </div>
                 
@@ -1000,12 +1130,12 @@
                     
                     <div class="form-group">
                         <label>Equipamento</label>
-                        <input type="text" id="customExerciseEquipment" required placeholder="Ex: Barra, Halteres, Máquina">
+                        <input type="text" id="customExerciseEquipment" placeholder="Ex: Haltere, Barra, Máquina">
                     </div>
                     
                     <div class="form-group">
-                        <label>Calorias por Minuto</label>
-                        <input type="number" id="customExerciseCalories" required min="1" step="0.1" placeholder="8">
+                        <label>Calorias Queimadas por Minuto</label>
+                        <input type="number" id="customExerciseCalories" required min="1" step="0.5" placeholder="8">
                     </div>
                     
                     <button type="submit" class="btn btn-primary">
@@ -1028,10 +1158,10 @@
             <div class="card">
                 <h2>⚙️ Configurações</h2>
                 
-                <h3 style="margin: 20px 0 15px 0; color: #667eea;">🎯 Mudar Objetivo</h3>
+                <h3 style="margin-bottom: 15px; color: #a78bfa;">🎯 Ajustar Metas</h3>
                 <form onsubmit="handleChangeGoal(event)">
                     <div class="form-group">
-                        <label>Novo Objetivo</label>
+                        <label>Objetivo</label>
                         <select id="editGoal" required>
                             <option value="lose_weight">Perder peso</option>
                             <option value="maintain">Manter peso</option>
@@ -1051,47 +1181,37 @@
                     </div>
                     
                     <button type="submit" class="btn btn-primary">
-                        Atualizar Objetivo 🎯
+                        Salvar Alterações
                     </button>
                 </form>
                 
-                <h3 style="margin: 30px 0 15px 0; color: #667eea;">💧 Lembrete de Água</h3>
+                <h3 style="margin-bottom: 15px; margin-top: 25px; color: #a78bfa;">💧 Lembrete de Água</h3>
                 <form onsubmit="handleWaterReminderSettings(event)">
                     <div class="form-group">
-                        <label style="display: flex; align-items: center; gap: 10px;">
-                            <input type="checkbox" id="waterReminderEnabled" style="width: auto;">
-                            Ativar lembrete diário de água
+                        <label>
+                            <input type="checkbox" id="waterReminderEnabled" style="width: auto; margin-right: 8px;">
+                            Ativar Lembrete de Água
                         </label>
                     </div>
                     
                     <div class="form-group">
-                        <label>Horário do Lembrete</label>
+                        <label>Hora do Lembrete</label>
                         <input type="time" id="waterReminderTime" value="09:00">
                     </div>
                     
                     <button type="submit" class="btn btn-success">
-                        Salvar Configurações 💧
+                        Salvar Configurações
                     </button>
                 </form>
                 
-                <button onclick="showScreen('dashboard')" class="btn btn-danger" style="margin-top: 20px;">
-                    Voltar
+                <h3 style="margin-bottom: 15px; margin-top: 25px; color: #a78bfa;">⚠️ Zona de Perigo</h3>
+                <button onclick="if(confirm('Tem certeza que deseja resetar todos os dados? Essa ação é irreversível!')) resetData();" class="btn btn-danger">
+                    🔄 Resetar Todos os Dados
                 </button>
             </div>
         </div>
     </div>
-    
+
     <script src="app.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js')
-                .then((registration) => {
-                    console.log('Service Worker registrado com sucesso:', registration.scope);
-                })
-                .catch((error) => {
-                    console.log('Falha ao registrar Service Worker:', error);
-                });
-        }
-    </script>
 </body>
 </html>
