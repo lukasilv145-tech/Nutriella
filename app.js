@@ -30,6 +30,52 @@ const FOOD_DATABASE = [
     {id: 28, name: 'Leite Desnatado', category: 'beverages', calories: 35, protein: 3.4, carbs: 5, fat: 0.1, emoji: '🥛', serving_size: 100},
     {id: 29, name: 'Suco de Laranja Natural', category: 'beverages', calories: 45, protein: 0.7, carbs: 10.4, fat: 0.2, emoji: '🍊', serving_size: 100},
     {id: 30, name: 'Café Preto', category: 'beverages', calories: 2, protein: 0.3, carbs: 0, fat: 0, emoji: '☕', serving_size: 100},
+    {id: 31, name: 'Farofa', category: 'carbs', calories: 365, protein: 2, carbs: 65, fat: 10, emoji: '🟤', serving_size: 100},
+    {id: 32, name: 'Purê de Batata', category: 'carbs', calories: 113, protein: 2, carbs: 17, fat: 4, emoji: '🥔', serving_size: 100},
+    {id: 33, name: 'Aipim Cozido (Mandioca)', category: 'carbs', calories: 125, protein: 0.6, carbs: 30, fat: 0.3, emoji: '🍠', serving_size: 100},
+    {id: 34, name: 'Farinha de Mandioca', category: 'carbs', calories: 365, protein: 1.6, carbs: 88, fat: 0.3, emoji: '🌾', serving_size: 100},
+    {id: 35, name: 'Polenta', category: 'carbs', calories: 85, protein: 2, carbs: 18, fat: 0.5, emoji: '🌽', serving_size: 100},
+    {id: 36, name: 'Inhame Cozido', category: 'carbs', calories: 118, protein: 1.5, carbs: 27, fat: 0.2, emoji: '🍠', serving_size: 100},
+    {id: 37, name: 'Feijão Tropeiro', category: 'carbs', calories: 180, protein: 8, carbs: 20, fat: 7, emoji: '🫘', serving_size: 100},
+    {id: 38, name: 'Coxinha', category: 'carbs', calories: 300, protein: 9, carbs: 28, fat: 17, emoji: '🍗', serving_size: 100},
+    {id: 39, name: 'Pão de Queijo', category: 'carbs', calories: 380, protein: 6, carbs: 34, fat: 24, emoji: '🧀', serving_size: 100},
+    {id: 40, name: 'Tapioca', category: 'carbs', calories: 160, protein: 0.3, carbs: 39, fat: 0.1, emoji: '🫓', serving_size: 100},
+    {id: 41, name: 'Couve Refogada', category: 'vegetables', calories: 35, protein: 2, carbs: 4, fat: 1.5, emoji: '🥬', serving_size: 100},
+    {id: 42, name: 'Abóbora Cozida', category: 'vegetables', calories: 26, protein: 1, carbs: 6.5, fat: 0.1, emoji: '🎃', serving_size: 100},
+    {id: 43, name: 'Vinagrete', category: 'vegetables', calories: 35, protein: 1, carbs: 6, fat: 1, emoji: '🍅', serving_size: 100},
+    {id: 44, name: 'Picanha Grelhada', category: 'proteins', calories: 250, protein: 26, carbs: 0, fat: 16, emoji: '🥩', serving_size: 100},
+    {id: 45, name: 'Linguiça Calabresa', category: 'proteins', calories: 330, protein: 15, carbs: 2, fat: 29, emoji: '🌭', serving_size: 100},
+    {id: 46, name: 'Moqueca de Peixe', category: 'proteins', calories: 140, protein: 15, carbs: 4, fat: 7, emoji: '🐟', serving_size: 100},
+    {id: 47, name: 'Açaí na Tigela', category: 'fruits', calories: 65, protein: 0.8, carbs: 6, fat: 3.9, emoji: '🍇', serving_size: 100},
+    {id: 48, name: 'Guaraná', category: 'beverages', calories: 40, protein: 0, carbs: 10, fat: 0, emoji: '🥤', serving_size: 100},
+    {id: 49, name: 'Manga', category: 'fruits', calories: 60, protein: 0.8, carbs: 15, fat: 0.4, emoji: '🥭', serving_size: 100},
+    {id: 50, name: 'Mamão', category: 'fruits', calories: 43, protein: 0.5, carbs: 11, fat: 0.3, emoji: '🍑', serving_size: 100},
+    {id: 51, name: 'Abacaxi', category: 'fruits', calories: 50, protein: 0.5, carbs: 13, fat: 0.1, emoji: '🍍', serving_size: 100},
+    {id: 52, name: 'Melancia', category: 'fruits', calories: 30, protein: 0.6, carbs: 8, fat: 0.2, emoji: '🍉', serving_size: 100},
+    {id: 53, name: 'Uva', category: 'fruits', calories: 69, protein: 0.7, carbs: 18, fat: 0.2, emoji: '🍇', serving_size: 100},
+    {id: 54, name: 'Maracujá', category: 'fruits', calories: 68, protein: 2, carbs: 13, fat: 2.4, emoji: '🟡', serving_size: 100},
+    {id: 55, name: 'Pepino', category: 'vegetables', calories: 15, protein: 0.7, carbs: 3.6, fat: 0.1, emoji: '🥒', serving_size: 100},
+    {id: 56, name: 'Pimentão', category: 'vegetables', calories: 20, protein: 0.9, carbs: 4.6, fat: 0.2, emoji: '🫑', serving_size: 100},
+    {id: 57, name: 'Repolho', category: 'vegetables', calories: 25, protein: 1.3, carbs: 5.8, fat: 0.1, emoji: '🥬', serving_size: 100},
+    {id: 58, name: 'Beterraba', category: 'vegetables', calories: 43, protein: 1.6, carbs: 10, fat: 0.2, emoji: '🔴', serving_size: 100},
+    {id: 59, name: 'Chuchu', category: 'vegetables', calories: 19, protein: 0.8, carbs: 4.5, fat: 0.1, emoji: '🥒', serving_size: 100},
+    {id: 60, name: 'Quiabo', category: 'vegetables', calories: 33, protein: 2, carbs: 7, fat: 0.2, emoji: '🫛', serving_size: 100},
+    {id: 61, name: 'Milho Verde Cozido', category: 'carbs', calories: 96, protein: 3.4, carbs: 21, fat: 1.5, emoji: '🌽', serving_size: 100},
+    {id: 62, name: 'Batata Doce', category: 'carbs', calories: 86, protein: 1.6, carbs: 20, fat: 0.1, emoji: '🍠', serving_size: 100},
+    {id: 63, name: 'Grão de Bico Cozido', category: 'carbs', calories: 164, protein: 8.9, carbs: 27, fat: 2.6, emoji: '🫘', serving_size: 100},
+    {id: 64, name: 'Lentilha Cozida', category: 'carbs', calories: 116, protein: 9, carbs: 20, fat: 0.4, emoji: '🫘', serving_size: 100},
+    {id: 65, name: 'Cuscuz', category: 'carbs', calories: 112, protein: 2.5, carbs: 24, fat: 0.5, emoji: '🌽', serving_size: 100},
+    {id: 66, name: 'Angu', category: 'carbs', calories: 65, protein: 1.4, carbs: 14, fat: 0.3, emoji: '🌽', serving_size: 100},
+    {id: 67, name: 'Frango Assado', category: 'proteins', calories: 190, protein: 27, carbs: 0, fat: 8, emoji: '🍗', serving_size: 100},
+    {id: 68, name: 'Carne de Sol', category: 'proteins', calories: 210, protein: 30, carbs: 0, fat: 10, emoji: '🥩', serving_size: 100},
+    {id: 69, name: 'Queijo Coalho', category: 'proteins', calories: 265, protein: 24, carbs: 1, fat: 19, emoji: '🧀', serving_size: 100},
+    {id: 70, name: 'Omelete', category: 'proteins', calories: 154, protein: 11, carbs: 1.6, fat: 11.7, emoji: '🍳', serving_size: 100},
+    {id: 71, name: 'Carne Moída', category: 'proteins', calories: 215, protein: 26, carbs: 0, fat: 12, emoji: '🥩', serving_size: 100},
+    {id: 72, name: 'Suco de Maracujá', category: 'beverages', calories: 44, protein: 0.5, carbs: 11, fat: 0.1, emoji: '🧃', serving_size: 100},
+    {id: 73, name: 'Suco de Acerola', category: 'beverages', calories: 33, protein: 0.9, carbs: 8, fat: 0.3, emoji: '🧃', serving_size: 100},
+    {id: 74, name: 'Chá Mate', category: 'beverages', calories: 1, protein: 0, carbs: 0.2, fat: 0, emoji: '🍵', serving_size: 100},
+    {id: 75, name: 'Castanha de Caju', category: 'fats', calories: 553, protein: 18, carbs: 30, fat: 44, emoji: '🥜', serving_size: 100},
+    {id: 76, name: 'Castanha do Pará', category: 'fats', calories: 656, protein: 14, carbs: 12, fat: 66, emoji: '🌰', serving_size: 100},
 ];
 
 // Exercise Database
@@ -65,6 +111,26 @@ const EXERCISE_DATABASE = [
     {id: 26, name: 'Barra Fixa', category: 'outdoor', muscle: 'costas', equipment: 'barra', calories_per_min: 7},
     {id: 27, name: 'Agachamento ao Ar Livre', category: 'outdoor', muscle: 'pernas', equipment: 'nenhum', calories_per_min: 9},
     {id: 28, name: 'Corrida de Escadas', category: 'outdoor', muscle: 'pernas', equipment: 'nenhum', calories_per_min: 15},
+    {id: 29, name: 'Peck Deck', category: 'gym', muscle: 'peito', equipment: 'máquina', calories_per_min: 5},
+    {id: 30, name: 'Flexão Diamante', category: 'outdoor', muscle: 'peito', equipment: 'nenhum', calories_per_min: 9},
+    {id: 31, name: 'Remada Baixa', category: 'gym', muscle: 'costas', equipment: 'polia', calories_per_min: 7},
+    {id: 32, name: 'Pull-over', category: 'gym', muscle: 'costas', equipment: 'halteres', calories_per_min: 6},
+    {id: 33, name: 'Afundo', category: 'gym', muscle: 'pernas', equipment: 'halteres', calories_per_min: 9},
+    {id: 34, name: 'Cadeira Adutora', category: 'gym', muscle: 'pernas', equipment: 'máquina', calories_per_min: 5},
+    {id: 35, name: 'Panturrilha em Pé', category: 'gym', muscle: 'pernas', equipment: 'máquina', calories_per_min: 4},
+    {id: 36, name: 'Elevação Frontal', category: 'gym', muscle: 'ombros', equipment: 'halteres', calories_per_min: 5},
+    {id: 37, name: 'Remada Alta', category: 'gym', muscle: 'ombros', equipment: 'barra', calories_per_min: 6},
+    {id: 38, name: 'Rosca Concentrada', category: 'gym', muscle: 'bíceps', equipment: 'halteres', calories_per_min: 4},
+    {id: 39, name: 'Rosca Scott', category: 'gym', muscle: 'bíceps', equipment: 'barra W', calories_per_min: 5},
+    {id: 40, name: 'Tríceps Coice', category: 'gym', muscle: 'tríceps', equipment: 'halteres', calories_per_min: 4},
+    {id: 41, name: 'Mergulho no Banco', category: 'gym', muscle: 'tríceps', equipment: 'nenhum', calories_per_min: 6},
+    {id: 42, name: 'Prancha', category: 'gym', muscle: 'abdomen', equipment: 'solo', calories_per_min: 5},
+    {id: 43, name: 'Elevação de Pernas', category: 'gym', muscle: 'abdomen', equipment: 'solo', calories_per_min: 6},
+    {id: 44, name: 'Remo Ergômetro', category: 'gym', muscle: 'cardio', equipment: 'máquina', calories_per_min: 10},
+    {id: 45, name: 'Elíptico', category: 'gym', muscle: 'cardio', equipment: 'máquina', calories_per_min: 9},
+    {id: 46, name: 'HIIT', category: 'gym', muscle: 'full_body', equipment: 'nenhum', calories_per_min: 15},
+    {id: 47, name: 'Trilha', category: 'outdoor', muscle: 'pernas', equipment: 'nenhum', calories_per_min: 8},
+    {id: 48, name: 'Dança', category: 'outdoor', muscle: 'full_body', equipment: 'nenhum', calories_per_min: 7},
 ];
 
 // State
@@ -83,7 +149,7 @@ let customExercises = [];
 let exerciseLog = {};
 let currentFoodPhoto = null;
 let selectedExerciseId = null;
-let exerciseCategoryFilter = 'all';
+let exerciseMuscleFilter = 'all';
 
 // Initialize
 function init() {
@@ -315,12 +381,17 @@ function logExercise(exerciseId, duration, sets, reps, weight) {
     }
     
     const exercise = getAllExercises().find(e => e.id === exerciseId);
-    const caloriesBurned = exercise.calories_per_min * duration;
+    const isCardio = exercise.muscle === 'cardio';
+    
+    // Exercícios de academia (musculação) não pedem duração ao usuário;
+    // estimamos o tempo com base nas séries (execução + descanso).
+    const effectiveDuration = isCardio ? duration : Math.max(sets, 1) * 2.5;
+    const caloriesBurned = exercise.calories_per_min * effectiveDuration;
     
     exerciseLog[dateStr].push({
         exercise_id: exerciseId,
         exercise_name: exercise.name,
-        duration: duration,
+        duration: isCardio ? duration : null,
         sets: sets,
         reps: reps,
         weight: weight,
@@ -351,22 +422,25 @@ function renderExerciseList() {
     if (exercises.length === 0) {
         container.innerHTML = '<div style="text-align: center; padding: 30px 15px;"><div style="font-size: 36px; margin-bottom: 10px;">🏋️</div><p style="color: #888;">Nenhum exercício registrado neste dia</p><p style="color: #666; font-size: 12px; margin-top: 5px;">Toque em "Registrar Exercício" para começar</p></div>';
     } else {
-        container.innerHTML = exercises.map(exercise => `
-            <div class="meal-item">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div class="exercise-icon">${getExerciseIcon(exercise.exercise_id)}</div>
-                    <div>
-                        <strong>${exercise.exercise_name}</strong>
-                        <div style="font-size: 12px; color: #888;">
-                            ${exercise.duration} min • ${exercise.sets}x${exercise.reps || '-'} ${exercise.weight ? `• ${exercise.weight}kg` : ''}
+        container.innerHTML = exercises.map(exercise => {
+            const detail = exercise.duration
+                ? `${exercise.duration} min`
+                : `${exercise.sets}x${exercise.reps || '-'}${exercise.weight ? ` • ${exercise.weight}kg` : ''}`;
+            return `
+                <div class="meal-item">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="exercise-icon">${getExerciseIcon(exercise.exercise_id)}</div>
+                        <div>
+                            <strong>${exercise.exercise_name}</strong>
+                            <div style="font-size: 12px; color: #888;">${detail}</div>
                         </div>
                     </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: bold; color: #f6ad55;">${exercise.calories_burned.toFixed(0)} kcal</div>
+                    </div>
                 </div>
-                <div style="text-align: right;">
-                    <div style="font-weight: bold; color: #f6ad55;">${exercise.calories_burned.toFixed(0)} kcal</div>
-                </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
     
     // Update total calories burned
@@ -423,19 +497,18 @@ function renderExerciseGrid() {
     const container = document.getElementById('exerciseGrid');
     if (!container) return;
     
-    const allExercises = getAllExercises().filter(e => exerciseCategoryFilter === 'all' || e.category === exerciseCategoryFilter);
+    const allExercises = getAllExercises().filter(e => exerciseMuscleFilter === 'all' || e.muscle === exerciseMuscleFilter);
     
     container.innerHTML = allExercises.map(exercise => `
-        <div class="food-card ${exercise.id === selectedExerciseId ? 'selected' : ''}" onclick="selectExercise(${exercise.id})">
-            <div class="food-emoji">${exercise.category === 'outdoor' ? '🏃' : '🏋️'}</div>
+        <div class="food-card exercise-card ${exercise.id === selectedExerciseId ? 'selected' : ''}" onclick="selectExercise(${exercise.id})">
             <div class="food-name">${exercise.name}</div>
             <div class="food-info">${exercise.calories_per_min} kcal/min</div>
         </div>
     `).join('');
 }
 
-function filterExerciseCategory(category, btn) {
-    exerciseCategoryFilter = category;
+function filterExerciseMuscle(muscle, btn) {
+    exerciseMuscleFilter = muscle;
     document.querySelectorAll('#exerciseCategoryFilter .category-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     renderExerciseGrid();
@@ -444,6 +517,28 @@ function filterExerciseCategory(category, btn) {
 function selectExercise(exerciseId) {
     selectedExerciseId = exerciseId;
     renderExerciseGrid();
+    updateExerciseFormFields();
+}
+
+function updateExerciseFormFields() {
+    const durationGroup = document.getElementById('exerciseDurationGroup');
+    const strengthGroup = document.getElementById('exerciseStrengthGroup');
+    const hint = document.getElementById('exerciseFormHint');
+    if (!durationGroup || !strengthGroup) return;
+    
+    if (!selectedExerciseId) {
+        durationGroup.classList.add('hidden');
+        strengthGroup.classList.add('hidden');
+        if (hint) hint.classList.remove('hidden');
+        return;
+    }
+    
+    if (hint) hint.classList.add('hidden');
+    const exercise = getAllExercises().find(e => e.id === selectedExerciseId);
+    const isCardio = exercise && exercise.muscle === 'cardio';
+    
+    durationGroup.classList.toggle('hidden', !isCardio);
+    strengthGroup.classList.toggle('hidden', isCardio);
 }
 
 function renderCustomExercisesList() {
@@ -476,10 +571,29 @@ function handleLogExercise(event) {
         return;
     }
     
-    const duration = parseFloat(document.getElementById('exerciseDuration').value);
-    const sets = parseInt(document.getElementById('exerciseSets').value) || 0;
-    const reps = parseInt(document.getElementById('exerciseReps').value) || 0;
-    const weight = parseFloat(document.getElementById('exerciseWeight').value) || 0;
+    const exercise = getAllExercises().find(e => e.id === selectedExerciseId);
+    const isCardio = exercise.muscle === 'cardio';
+    
+    let duration = 0;
+    let sets = 0;
+    let reps = 0;
+    let weight = 0;
+    
+    if (isCardio) {
+        duration = parseFloat(document.getElementById('exerciseDuration').value);
+        if (!duration || duration <= 0) {
+            alert('Informe a duração do exercício');
+            return;
+        }
+    } else {
+        sets = parseInt(document.getElementById('exerciseSets').value) || 0;
+        reps = parseInt(document.getElementById('exerciseReps').value) || 0;
+        weight = parseFloat(document.getElementById('exerciseWeight').value) || 0;
+        if (!sets || sets <= 0) {
+            alert('Informe o número de séries');
+            return;
+        }
+    }
     
     logExercise(selectedExerciseId, duration, sets, reps, weight);
     
@@ -489,6 +603,7 @@ function handleLogExercise(event) {
     document.getElementById('exerciseSets').value = '';
     document.getElementById('exerciseReps').value = '';
     document.getElementById('exerciseWeight').value = '';
+    updateExerciseFormFields();
     
     alert('Exercício registrado com sucesso!');
     showScreen('exercises');
@@ -622,11 +737,12 @@ function showScreen(screenName) {
         renderExerciseList();
     } else if (screenName === 'logExercise') {
         selectedExerciseId = null;
-        exerciseCategoryFilter = 'all';
+        exerciseMuscleFilter = 'all';
         document.querySelectorAll('#exerciseCategoryFilter .category-btn').forEach(b => b.classList.remove('active'));
         const allBtn = document.querySelector('#exerciseCategoryFilter .category-btn');
         if (allBtn) allBtn.classList.add('active');
         renderExerciseGrid();
+        updateExerciseFormFields();
     } else if (screenName === 'addCustomExercise') {
         renderCustomExercisesList();
     } else if (screenName === 'calendar') {
