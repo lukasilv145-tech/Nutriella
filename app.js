@@ -111,20 +111,9 @@ function loadUserData() {
     }
 }
 
-function saveMealData() {
-    const mealData = localStorage.getItem('nutriela_meals') || '{}';
-    const meals = JSON.parse(mealData);
-    localStorage.setItem('nutriela_meals', JSON.stringify(meals));
-}
-
 function getMealData() {
     const mealData = localStorage.getItem('nutriela_meals') || '{}';
     return JSON.parse(mealData);
-}
-
-function saveWaterData() {
-    const waterData = localStorage.getItem('nutriela_water') || '{}';
-    localStorage.setItem('nutriela_water', waterData);
 }
 
 function getWaterData() {
