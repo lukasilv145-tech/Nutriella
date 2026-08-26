@@ -3,13 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#4a1a6b">
+    <meta name="theme-color" content="#012a4a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Nutriela - Sua Nutrição Simplificada</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <style>
+        :root {
+            --accent: #00e5ff;
+            --accent-bright: #00c3ff;
+            --accent-border: #0099ff;
+            --accent-dark: #012a4a;
+            --accent-mid: #0077b6;
+            --surface-1: #0a1626;
+            --surface-2: #0f2438;
+            --surface-3: #16344f;
+            --bg-deep: #030812;
+            --glow: 0 0 10px rgba(0, 229, 255, 0.45);
+            --glow-strong: 0 0 18px rgba(0, 229, 255, 0.7);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,7 +32,7 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+            background: linear-gradient(135deg, #030712 0%, #041a33 50%, #030812 100%);
             min-height: 100vh;
             color: #e0e0e0;
         }
@@ -27,28 +41,30 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-            padding-bottom: 80px;
+            padding-bottom: 100px;
         }
         
         .header {
-            background: #1e1e3f;
+            background: #0a1626;
             padding: 20px;
             border-radius: 15px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4), 0 0 20px rgba(0, 229, 255, 0.12);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #2d2d5a;
+            border: 1px solid var(--accent-border);
         }
 
         .logo {
             font-size: 24px;
             font-weight: bold;
-            color: #a78bfa;
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
             display: flex;
             align-items: center;
             gap: 10px;
+            letter-spacing: 0.5px;
         }
 
         .logo img {
@@ -70,7 +86,7 @@
         .nav button {
             background: none;
             border: none;
-            color: #a78bfa;
+            color: #00e5ff;
             padding: 8px 12px;
             border-radius: 8px;
             cursor: pointer;
@@ -78,16 +94,16 @@
         }
 
         .nav button:hover {
-            background: #2d2d5a;
+            background: #0f2438;
         }
 
         .card {
-            background: #1e1e3f;
+            background: #0a1626;
             padding: 20px;
             border-radius: 15px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            border: 1px solid #2d2d5a;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 12px rgba(0, 229, 255, 0.06);
+            border: 1px solid #0f2438;
         }
         
         .btn {
@@ -97,7 +113,7 @@
             cursor: pointer;
             font-size: 16px;
             font-weight: bold;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
             width: 100%;
         }
         
@@ -106,9 +122,14 @@
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #4a1a6b 0%, #5c2d8a 100%);
+            background: linear-gradient(135deg, #012a4a 0%, #0077b6 100%);
             color: white;
-            border: 1px solid #7b4397;
+            border: 1px solid var(--accent-border);
+            box-shadow: 0 0 10px rgba(0, 153, 255, 0.35);
+        }
+
+        .btn-primary:hover {
+            box-shadow: var(--glow-strong);
         }
 
         .btn-success {
@@ -131,31 +152,32 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #a78bfa;
+            color: #00e5ff;
         }
 
         .form-group input,
         .form-group select {
             width: 100%;
             padding: 12px;
-            border: 2px solid #2d2d5a;
+            border: 2px solid #0f2438;
             border-radius: 10px;
             font-size: 16px;
             transition: border-color 0.3s;
-            background: #0f0f23;
+            background: #030812;
             color: #e0e0e0;
         }
 
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #7b4397;
+            border-color: var(--accent-border);
+            box-shadow: var(--glow);
         }
         
         .progress-bar {
             width: 100%;
             height: 24px;
-            background: #2d2d5a;
+            background: #0f2438;
             border-radius: 12px;
             overflow: hidden;
             margin-top: 8px;
@@ -174,18 +196,18 @@
         }
 
         .stat-card {
-            background: #1e1e3f;
+            background: #0a1626;
             padding: 15px;
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            border: 1px solid #2d2d5a;
+            border: 1px solid #0f2438;
         }
 
         .stat-value {
             font-size: 28px;
             font-weight: bold;
-            color: #a78bfa;
+            color: #00e5ff;
         }
 
         .stat-label {
@@ -199,10 +221,10 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px;
-            background: #2d2d5a;
+            background: #0f2438;
             border-radius: 10px;
             margin-bottom: 10px;
-            border: 1px solid #3d3d6a;
+            border: 1px solid #16344f;
         }
 
         .food-grid {
@@ -212,7 +234,7 @@
         }
 
         .food-card {
-            background: #2d2d5a;
+            background: #0f2438;
             padding: 12px;
             border-radius: 12px;
             cursor: pointer;
@@ -221,12 +243,13 @@
         }
 
         .food-card:hover {
-            background: #3d3d6a;
+            background: #16344f;
         }
 
         .food-card.selected {
-            border-color: #7b4397;
-            background: #3d3d6a;
+            border-color: var(--accent-border);
+            background: #16344f;
+            box-shadow: var(--glow);
         }
         
         .food-emoji {
@@ -259,9 +282,9 @@
 
         .category-btn {
             padding: 8px 16px;
-            border: 2px solid #7b4397;
-            background: #1e1e3f;
-            color: #a78bfa;
+            border: 2px solid #0099ff;
+            background: #0a1626;
+            color: #00e5ff;
             border-radius: 20px;
             cursor: pointer;
             font-size: 12px;
@@ -271,9 +294,10 @@
 
         .category-btn.active,
         .category-btn:hover {
-            background: #4a1a6b;
+            background: #012a4a;
             color: white;
-            border-color: #7b4397;
+            border-color: #0099ff;
+            box-shadow: var(--glow);
         }
         
         .date-nav {
@@ -281,23 +305,23 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 20px;
-            background: #1e1e3f;
+            background: #0a1626;
             padding: 12px;
             border-radius: 10px;
-            border: 1px solid #2d2d5a;
+            border: 1px solid #0f2438;
         }
 
         .date-nav button {
             padding: 8px 16px;
-            border: 1px solid #2d2d5a;
-            background: #2d2d5a;
+            border: 1px solid #0f2438;
+            background: #0f2438;
             color: #e0e0e0;
             border-radius: 8px;
             cursor: pointer;
         }
 
         .date-nav button:hover {
-            background: #3d3d6a;
+            background: #16344f;
         }
         
         .hidden {
@@ -322,21 +346,21 @@
 
         .calendar-header span {
             font-weight: bold;
-            color: #a78bfa;
+            color: #00e5ff;
             font-size: 16px;
         }
 
         .calendar-header button {
             padding: 8px 16px;
-            border: 1px solid #2d2d5a;
-            background: #2d2d5a;
+            border: 1px solid #0f2438;
+            background: #0f2438;
             color: #e0e0e0;
             border-radius: 8px;
             cursor: pointer;
         }
 
         .calendar-header button:hover {
-            background: #3d3d6a;
+            background: #16344f;
         }
 
         .calendar-grid {
@@ -358,8 +382,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #2d2d5a;
-            border: 1px solid #3d3d6a;
+            background: #0f2438;
+            border: 1px solid #16344f;
             border-radius: 8px;
             color: #e0e0e0;
             cursor: pointer;
@@ -368,7 +392,7 @@
         }
 
         .calendar-day:hover {
-            background: #3d3d6a;
+            background: #16344f;
         }
 
         .calendar-day.other-month {
@@ -376,14 +400,15 @@
         }
 
         .calendar-day.today {
-            border-color: #7b4397;
+            border-color: #0099ff;
             font-weight: bold;
         }
 
         .calendar-day.selected {
-            background: #4a1a6b;
-            border-color: #a78bfa;
+            background: #012a4a;
+            border-color: #00e5ff;
             color: white;
+            box-shadow: var(--glow);
         }
 
         .calendar-day.has-data::after {
@@ -418,11 +443,64 @@
             height: 38px;
             flex-shrink: 0;
             border-radius: 10px;
-            background: #2d2d5a;
+            background: #0f2438;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            background: #030a16;
+            border-top: 1px solid var(--accent-border);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.5), 0 -1px 12px rgba(0, 229, 255, 0.15);
+            padding: 6px 10px calc(6px + env(safe-area-inset-bottom, 0px));
+        }
+
+        .bottom-nav button {
+            flex: 1;
+            background: none;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            padding: 8px 4px;
+            border-radius: 12px;
+            cursor: pointer;
+            color: #5a7a94;
+            transition: all 0.25s;
+        }
+
+        .bottom-nav-icon {
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .bottom-nav-label {
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 0.3px;
+        }
+
+        .bottom-nav button:hover {
+            color: var(--accent);
+        }
+
+        .bottom-nav button.active {
+            color: var(--accent);
+            background: rgba(0, 229, 255, 0.08);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
+        }
+
+        .bottom-nav button.active .bottom-nav-icon {
+            filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.8));
         }
 
         .week-chart {
@@ -459,7 +537,7 @@
 
         .week-chart-bar {
             width: 60%;
-            background: #2d2d5a;
+            background: #0f2438;
             border-radius: 6px 6px 0 0;
             transition: height 0.4s ease;
         }
@@ -475,7 +553,7 @@
         }
 
         .week-chart-label.today {
-            color: #a78bfa;
+            color: #00e5ff;
             font-weight: bold;
         }
         
@@ -488,13 +566,13 @@
         }
 
         h2 {
-            color: #a78bfa;
+            color: #00e5ff;
             margin-bottom: 20px;
             text-align: center;
         }
 
         h3 {
-            color: #a78bfa;
+            color: #00e5ff;
             margin-bottom: 15px;
         }
         
@@ -505,7 +583,7 @@
         .total-calories {
             font-size: 18px;
             font-weight: bold;
-            color: #a78bfa;
+            color: #00e5ff;
         }
 
         .custom-food {
@@ -535,9 +613,9 @@
             height: 32px;
             flex-shrink: 0;
             border-radius: 8px;
-            border: 1px solid #7b4397;
-            background: #1e1e3f;
-            color: #a78bfa;
+            border: 1px solid #0099ff;
+            background: #0a1626;
+            color: #00e5ff;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
@@ -547,8 +625,9 @@
         }
 
         .grams-btn:hover {
-            background: #4a1a6b;
+            background: #012a4a;
             color: white;
+            box-shadow: var(--glow);
         }
 
         .grams-value-wrap {
@@ -562,8 +641,8 @@
         .grams-value {
             width: 54px;
             text-align: center;
-            background: #0f0f23;
-            border: 2px solid #2d2d5a;
+            background: #030812;
+            border: 2px solid #0f2438;
             border-radius: 8px;
             color: #e0e0e0;
             font-size: 15px;
@@ -576,36 +655,6 @@
             color: #888;
         }
 
-        .grams-slider {
-            width: 100%;
-            -webkit-appearance: none;
-            appearance: none;
-            height: 6px;
-            border-radius: 3px;
-            background: #2d2d5a;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .grams-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #a78bfa;
-            cursor: pointer;
-            border: 2px solid #4a1a6b;
-        }
-
-        .grams-slider::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #a78bfa;
-            cursor: pointer;
-            border: 2px solid #4a1a6b;
-        }
-
         .grams-presets {
             display: flex;
             gap: 6px;
@@ -615,8 +664,8 @@
         .grams-preset-btn {
             padding: 4px 10px;
             border-radius: 12px;
-            border: 1px solid #2d2d5a;
-            background: #1e1e3f;
+            border: 1px solid #0f2438;
+            background: #0a1626;
             color: #888;
             font-size: 11px;
             cursor: pointer;
@@ -624,9 +673,10 @@
 
         .grams-preset-btn:hover,
         .grams-preset-btn.active {
-            background: #4a1a6b;
+            background: #012a4a;
             color: white;
-            border-color: #7b4397;
+            border-color: #0099ff;
+            box-shadow: var(--glow);
         }
 
         /* Mobile Responsiveness */
@@ -759,9 +809,7 @@
             </div>
             <div class="nav">
                 <button onclick="showScreen('dashboard')" id="navDashboard">📊</button>
-                <button onclick="showCalendar('dashboard')" id="navCalendar">📅</button>
                 <button onclick="showScreen('profile')" id="navProfile">👤</button>
-                <button onclick="showScreen('exercises')" id="navExercises">💪</button>
                 <button onclick="showScreen('addCustomFood')" id="navAddFood">➕🍽️</button>
                 <button onclick="showScreen('settings')" id="navSettings">⚙️</button>
                 <button onclick="resetData()" id="navReset">🔄</button>
@@ -834,9 +882,9 @@
         <!-- Dashboard Screen -->
         <div id="dashboardScreen" class="screen">
             <!-- User Info Card -->
-            <div class="card" style="background: linear-gradient(135deg, #4a1a6b 0%, #5c2d8a 50%, #7b4397 100%); color: white; border: 1px solid #9b5397;">
+            <div class="card" style="background: linear-gradient(135deg, #012a4a 0%, #0077b6 50%, #0099ff 100%); color: white; border: 1px solid #00c3ff;">
                 <div style="display: flex; align-items: center; gap: 15px;">
-                    <div id="dashboardProfilePhoto" style="width: 60px; height: 60px; border-radius: 50%; background: #2d2d5a; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #7b4397;">
+                    <div id="dashboardProfilePhoto" style="width: 60px; height: 60px; border-radius: 50%; background: #0f2438; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #0099ff;">
                         <span style="font-size: 30px;">👤</span>
                     </div>
                     <div style="flex: 1;">
@@ -854,7 +902,7 @@
                         <strong style="font-size: 18px;" id="dashboardWeight">0</strong>
                         <span style="font-size: 12px;">kg</span>
                     </div>
-                    <button onclick="showScreen('updateWeight')" class="btn" style="background: #1e1e3f; color: #a78bfa; padding: 8px 16px; font-size: 14px; width: auto; border: 1px solid #7b4397;">Atualizar Peso</button>
+                    <button onclick="showScreen('updateWeight')" class="btn" style="background: #0a1626; color: #00e5ff; padding: 8px 16px; font-size: 14px; width: auto; border: 1px solid #0099ff;">Atualizar Peso</button>
                 </div>
             </div>
             
@@ -982,10 +1030,10 @@
         <div id="profileScreen" class="screen">
             <div class="card">
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <div id="profilePhotoContainer" style="width: 100px; height: 100px; border-radius: 50%; background: #2d2d5a; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; overflow: hidden; border: 3px solid #7b4397;">
+                    <div id="profilePhotoContainer" style="width: 100px; height: 100px; border-radius: 50%; background: #0f2438; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; overflow: hidden; border: 3px solid #0099ff;">
                         <span style="font-size: 50px;">👤</span>
                     </div>
-                    <h2 style="color: #a78bfa; margin-top: 10px;" id="profileName"></h2>
+                    <h2 style="color: #00e5ff; margin-top: 10px;" id="profileName"></h2>
                     <p style="color: #a0a0a0;" id="profileInfo"></p>
                     
                     <div class="form-group" style="margin-top: 15px;">
@@ -996,7 +1044,7 @@
                     </div>
                 </div>
                 
-                <h3 style="margin-bottom: 15px; color: #a78bfa;">📏 Medidas Corporais</h3>
+                <h3 style="margin-bottom: 15px; color: #00e5ff;">📏 Medidas Corporais</h3>
                 <div class="stat-grid" style="margin-bottom: 20px;">
                     <div class="stat-card">
                         <div class="stat-value" id="profileWeight">0</div>
@@ -1013,7 +1061,7 @@
                     </div>
                 </div>
                 
-                <h3 style="margin-bottom: 15px; color: #a78bfa;">🎯 Metas Diárias</h3>
+                <h3 style="margin-bottom: 15px; color: #00e5ff;">🎯 Metas Diárias</h3>
                 <div class="stat-grid" style="margin-bottom: 20px;">
                     <div class="stat-card">
                         <div class="stat-value" style="color: #f6ad55;" id="profileCalorieGoal">0</div>
@@ -1037,7 +1085,7 @@
                     </div>
                 </div>
                 
-                <h3 style="margin-bottom: 15px; color: #a78bfa;">⚡ Informações Metabólicas</h3>
+                <h3 style="margin-bottom: 15px; color: #00e5ff;">⚡ Informações Metabólicas</h3>
                 <div class="card">
                     <div class="meal-item">
                         <span>TMB</span>
@@ -1205,14 +1253,16 @@
             <div class="card">
                 <h2>➕ Registrar Exercício</h2>
                 
-                <form onsubmit="handleLogExercise(event)">
-                    <div class="form-group">
-                        <label>Selecione o Exercício</label>
-                        <select id="exerciseSelect" required>
-                            <option value="">Escolha um exercício...</option>
-                        </select>
-                    </div>
-                    
+                <label style="display: block; margin-bottom: 8px; font-weight: bold; color: var(--accent);">Selecione o Exercício</label>
+                <div class="category-filter" id="exerciseCategoryFilter">
+                    <button type="button" class="category-btn active" onclick="filterExerciseCategory('all', this)">Todos</button>
+                    <button type="button" class="category-btn" onclick="filterExerciseCategory('gym', this)">🏋️ Academia</button>
+                    <button type="button" class="category-btn" onclick="filterExerciseCategory('outdoor', this)">🏃 Ar Livre</button>
+                </div>
+                
+                <div class="food-grid" id="exerciseGrid"></div>
+                
+                <form onsubmit="handleLogExercise(event)" style="margin-top: 20px;">
                     <div class="form-group">
                         <label>Duração (minutos)</label>
                         <input type="number" id="exerciseDuration" required min="1" placeholder="30">
@@ -1330,7 +1380,7 @@
             <div class="card">
                 <h2>⚙️ Configurações</h2>
                 
-                <h3 style="margin: 20px 0 15px 0; color: #a78bfa;">🎯 Mudar Objetivo</h3>
+                <h3 style="margin: 20px 0 15px 0; color: #00e5ff;">🎯 Mudar Objetivo</h3>
                 <form onsubmit="handleChangeGoal(event)">
                     <div class="form-group">
                         <label>Novo Objetivo</label>
@@ -1357,7 +1407,7 @@
                     </button>
                 </form>
                 
-                <h3 style="margin: 30px 0 15px 0; color: #a78bfa;">💧 Lembrete de Água</h3>
+                <h3 style="margin: 30px 0 15px 0; color: #00e5ff;">💧 Lembrete de Água</h3>
                 <form onsubmit="handleWaterReminderSettings(event)">
                     <div class="form-group">
                         <label style="display: flex; align-items: center; gap: 10px;">
@@ -1381,6 +1431,21 @@
                 </button>
             </div>
         </div>
+    </div>
+    
+    <div class="bottom-nav">
+        <button id="bottomAddMeal" onclick="showScreen('addMeal')">
+            <span class="bottom-nav-icon">🍽️</span>
+            <span class="bottom-nav-label">Refeição</span>
+        </button>
+        <button id="bottomExercise" onclick="showScreen('exercises')">
+            <span class="bottom-nav-icon">💪</span>
+            <span class="bottom-nav-label">Exercício</span>
+        </button>
+        <button id="bottomCalendar" onclick="showCalendar('dashboard')">
+            <span class="bottom-nav-icon">📅</span>
+            <span class="bottom-nav-label">Calendário</span>
+        </button>
     </div>
     
     <script src="app.js"></script>
