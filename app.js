@@ -70,6 +70,8 @@ const EXERCISE_DATABASE = [
 // State
 let currentUser = null;
 let currentDate = new Date();
+let calendarViewDate = new Date();
+let calendarReturnScreen = 'dashboard';
 let selectedFoods = {};
 let currentMealType = 'breakfast';
 let currentCategory = 'all';
@@ -332,6 +334,11 @@ function getExercisesForDate(dateStr) {
 }
 
 // Exercise UI Functions
+function getExerciseIcon(exerciseId) {
+    const exercise = getAllExercises().find(e => e.id === exerciseId);
+    return exercise && exercise.category === 'outdoor' ? '🏃' : '🏋️';
+}
+
 function renderExerciseList() {
     const container = document.getElementById('exerciseList');
     if (!container) return;
@@ -340,23 +347,25 @@ function renderExerciseList() {
     const exercises = getExercisesForDate(dateStr);
     
     if (exercises.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: #888; padding: 20px;">Nenhum exercício registrado hoje</p>';
-        return;
-    }
-    
-    container.innerHTML = exercises.map(exercise => `
-        <div class="meal-item">
-            <div>
-                <strong>${exercise.exercise_name}</strong>
-                <div style="font-size: 12px; color: #888;">
-                    ${exercise.duration} min • ${exercise.sets}x${exercise.reps || '-'} ${exercise.weight ? `• ${exercise.weight}kg` : ''}
+        container.innerHTML = '<div style="text-align: center; padding: 30px 15px;"><div style="font-size: 36px; margin-bottom: 10px;">🏋️</div><p style="color: #888;">Nenhum exercício registrado neste dia</p><p style="color: #666; font-size: 12px; margin-top: 5px;">Toque em "Registrar Exercício" para começar</p></div>';
+    } else {
+        container.innerHTML = exercises.map(exercise => `
+            <div class="meal-item">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="exercise-icon">${getExerciseIcon(exercise.exercise_id)}</div>
+                    <div>
+                        <strong>${exercise.exercise_name}</strong>
+                        <div style="font-size: 12px; color: #888;">
+                            ${exercise.duration} min • ${exercise.sets}x${exercise.reps || '-'} ${exercise.weight ? `• ${exercise.weight}kg` : ''}
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-weight: bold; color: #f6ad55;">${exercise.calories_burned.toFixed(0)} kcal</div>
                 </div>
             </div>
-            <div style="text-align: right;">
-                <div style="font-weight: bold; color: #f6ad55;">${exercise.calories_burned.toFixed(0)} kcal</div>
-            </div>
-        </div>
-    `).join('');
+        `).join('');
+    }
     
     // Update total calories burned
     const totalBurned = exercises.reduce((sum, e) => sum + e.calories_burned, 0);
@@ -370,17 +379,58 @@ function renderExerciseList() {
     if (dateEl) {
         dateEl.textContent = formatDate(currentDate);
     }
+    
+    renderWeeklyExerciseChart();
+}
+
+function renderWeeklyExerciseChart() {
+    const container = document.getElementById('weeklyExerciseChart');
+    if (!container) return;
+    
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        days.push(d);
+    }
+    
+    const dayLabels = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+    const values = days.map(d => {
+        const exercises = getExercisesForDate(dateToStr(d));
+        return exercises.reduce((sum, e) => sum + e.calories_burned, 0);
+    });
+    const maxValue = Math.max(...values, 1);
+    const todayStr = dateToStr(new Date());
+    
+    container.innerHTML = days.map((d, i) => {
+        const heightPct = Math.max(Math.round((values[i] / maxValue) * 100), values[i] > 0 ? 6 : 2);
+        const isToday = dateToStr(d) === todayStr;
+        return `
+            <div class="week-chart-col">
+                <div class="week-chart-value">${values[i] > 0 ? Math.round(values[i]) : ''}</div>
+                <div class="week-chart-bar-wrap">
+                    <div class="week-chart-bar ${values[i] > 0 ? 'has-value' : ''}" style="height: ${heightPct}%;"></div>
+                </div>
+                <div class="week-chart-label ${isToday ? 'today' : ''}">${dayLabels[d.getDay()]}</div>
+            </div>
+        `;
+    }).join('');
 }
 
 function renderExerciseSelect() {
     const select = document.getElementById('exerciseSelect');
     if (!select) return;
     
-    const allExercises = getAllExercises();
-    select.innerHTML = '<option value="">Escolha um exercício...</option>' + 
-        allExercises.map(exercise => `
-            <option value="${exercise.id}">${exercise.name} (${exercise.category === 'gym' ? 'Academia' : 'Ar Livre'}) - ${exercise.calories_per_min} kcal/min</option>
-        `).join('');
+    const gymExercises = getAllExercises().filter(e => e.category === 'gym');
+    const outdoorExercises = getAllExercises().filter(e => e.category === 'outdoor');
+    
+    const buildOptions = (list) => list.map(exercise => `
+        <option value="${exercise.id}">${exercise.name} - ${exercise.calories_per_min} kcal/min</option>
+    `).join('');
+    
+    select.innerHTML = '<option value="">Escolha um exercício...</option>' +
+        `<optgroup label="🏋️ Academia">${buildOptions(gymExercises)}</optgroup>` +
+        `<optgroup label="🏃 Ar Livre">${buildOptions(outdoorExercises)}</optgroup>`;
 }
 
 function renderCustomExercisesList() {
@@ -540,6 +590,8 @@ function showScreen(screenName) {
         renderExerciseSelect();
     } else if (screenName === 'addCustomExercise') {
         renderCustomExercisesList();
+    } else if (screenName === 'calendar') {
+        renderCalendar();
     }
 }
 
@@ -675,7 +727,78 @@ function getWaterForDate(dateStr) {
 
 function changeDate(days) {
     currentDate.setDate(currentDate.getDate() + days);
-    updateDashboard();
+    const activeScreen = document.querySelector('.screen.active');
+    if (activeScreen && activeScreen.id === 'exercisesScreen') {
+        renderExerciseList();
+    } else {
+        updateDashboard();
+    }
+}
+
+// Calendar
+function dateToStr(date) {
+    return date.toISOString().split('T')[0];
+}
+
+function getDatesWithData() {
+    const meals = getMealData();
+    const water = getWaterData();
+    const dates = new Set();
+    Object.keys(meals).forEach(d => { if (meals[d] && meals[d].length > 0) dates.add(d); });
+    Object.keys(exerciseLog).forEach(d => { if (exerciseLog[d] && exerciseLog[d].length > 0) dates.add(d); });
+    Object.keys(water).forEach(d => { if (water[d] > 0) dates.add(d); });
+    return dates;
+}
+
+function showCalendar(returnScreen) {
+    calendarReturnScreen = returnScreen;
+    calendarViewDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    showScreen('calendar');
+}
+
+function changeCalendarMonth(delta) {
+    calendarViewDate.setMonth(calendarViewDate.getMonth() + delta);
+    renderCalendar();
+}
+
+function renderCalendar() {
+    const monthLabel = document.getElementById('calendarMonthLabel');
+    const grid = document.getElementById('calendarGrid');
+    if (!monthLabel || !grid) return;
+
+    const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    monthLabel.textContent = `${monthNames[calendarViewDate.getMonth()]} ${calendarViewDate.getFullYear()}`;
+
+    const firstOfMonth = new Date(calendarViewDate.getFullYear(), calendarViewDate.getMonth(), 1);
+    const gridStart = new Date(firstOfMonth);
+    gridStart.setDate(gridStart.getDate() - firstOfMonth.getDay());
+
+    const datesWithData = getDatesWithData();
+    const todayStr = dateToStr(new Date());
+    const selectedStr = dateToStr(currentDate);
+    const weekDayLabels = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+
+    let html = weekDayLabels.map(d => `<div class="calendar-weekday">${d}</div>`).join('');
+
+    for (let i = 0; i < 42; i++) {
+        const cellDate = new Date(gridStart);
+        cellDate.setDate(gridStart.getDate() + i);
+        const cellStr = dateToStr(cellDate);
+        const classes = ['calendar-day'];
+        if (cellDate.getMonth() !== calendarViewDate.getMonth()) classes.push('other-month');
+        if (cellStr === todayStr) classes.push('today');
+        if (cellStr === selectedStr) classes.push('selected');
+        if (datesWithData.has(cellStr)) classes.push('has-data');
+
+        html += `<button type="button" class="${classes.join(' ')}" onclick="selectCalendarDate('${cellStr}')">${cellDate.getDate()}</button>`;
+    }
+    grid.innerHTML = html;
+}
+
+function selectCalendarDate(dateStr) {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    currentDate = new Date(y, m - 1, d);
+    showScreen(calendarReturnScreen);
 }
 
 function addWater() {
@@ -763,15 +886,27 @@ function updateSelectedFoods() {
     }
     
     card.classList.remove('hidden');
+    const presets = [50, 100, 150, 200];
     list.innerHTML = foods.map(food => `
-        <div class="meal-item">
-            <div>
+        <div class="meal-item food-selected-item">
+            <div class="food-selected-top">
                 <strong>${food.food_name}</strong>
-                <input type="number" value="${food.grams}" 
-                       class="input-grams"
-                       onchange="updateGrams(${food.food_id}, this.value)">
+                <div>${food.calories.toFixed(0)} kcal</div>
             </div>
-            <div>${food.calories.toFixed(0)} kcal</div>
+            <div class="grams-control">
+                <button type="button" class="grams-btn" onclick="adjustGrams(${food.food_id}, -10)">−</button>
+                <div class="grams-value-wrap">
+                    <input type="number" class="grams-value" value="${food.grams}" min="0"
+                           onchange="updateGrams(${food.food_id}, this.value)">
+                    <span class="grams-unit">g</span>
+                </div>
+                <button type="button" class="grams-btn" onclick="adjustGrams(${food.food_id}, 10)">+</button>
+            </div>
+            <input type="range" class="grams-slider" min="0" max="500" step="5"
+                   value="${food.grams}" oninput="updateGrams(${food.food_id}, this.value)">
+            <div class="grams-presets">
+                ${presets.map(g => `<button type="button" class="grams-preset-btn ${Number(food.grams) === g ? 'active' : ''}" onclick="updateGrams(${food.food_id}, ${g})">${g}g</button>`).join('')}
+            </div>
         </div>
     `).join('');
     
@@ -779,11 +914,17 @@ function updateSelectedFoods() {
     totalEl.textContent = total.toFixed(0);
 }
 
+function adjustGrams(foodId, delta) {
+    const current = selectedFoods[foodId].grams;
+    updateGrams(foodId, Math.max(0, current + delta));
+}
+
 function updateGrams(foodId, grams) {
     const food = getAllFoods().find(f => f.id === foodId);
-    const multiplier = grams / 100;
+    const safeGrams = Math.max(0, parseFloat(grams) || 0);
+    const multiplier = safeGrams / 100;
     
-    selectedFoods[foodId].grams = parseFloat(grams);
+    selectedFoods[foodId].grams = safeGrams;
     selectedFoods[foodId].calories = food.calories * multiplier;
     selectedFoods[foodId].protein = food.protein * multiplier;
     selectedFoods[foodId].carbs = food.carbs * multiplier;
