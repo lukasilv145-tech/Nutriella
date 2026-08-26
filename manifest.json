@@ -4,8 +4,8 @@
   "description": "App de nutrição offline para acompanhamento alimentar",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#1a1a2e",
-  "theme_color": "#4a1a6b",
+  "background_color": "#030712",
+  "theme_color": "#012a4a",
   "orientation": "portrait",
   "icons": [
     {
