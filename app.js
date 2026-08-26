@@ -82,6 +82,8 @@ let profilePhoto = null;
 let customExercises = [];
 let exerciseLog = {};
 let currentFoodPhoto = null;
+let selectedExerciseId = null;
+let exerciseCategoryFilter = 'all';
 
 // Initialize
 function init() {
@@ -417,20 +419,31 @@ function renderWeeklyExerciseChart() {
     }).join('');
 }
 
-function renderExerciseSelect() {
-    const select = document.getElementById('exerciseSelect');
-    if (!select) return;
+function renderExerciseGrid() {
+    const container = document.getElementById('exerciseGrid');
+    if (!container) return;
     
-    const gymExercises = getAllExercises().filter(e => e.category === 'gym');
-    const outdoorExercises = getAllExercises().filter(e => e.category === 'outdoor');
+    const allExercises = getAllExercises().filter(e => exerciseCategoryFilter === 'all' || e.category === exerciseCategoryFilter);
     
-    const buildOptions = (list) => list.map(exercise => `
-        <option value="${exercise.id}">${exercise.name} - ${exercise.calories_per_min} kcal/min</option>
+    container.innerHTML = allExercises.map(exercise => `
+        <div class="food-card ${exercise.id === selectedExerciseId ? 'selected' : ''}" onclick="selectExercise(${exercise.id})">
+            <div class="food-emoji">${exercise.category === 'outdoor' ? '🏃' : '🏋️'}</div>
+            <div class="food-name">${exercise.name}</div>
+            <div class="food-info">${exercise.calories_per_min} kcal/min</div>
+        </div>
     `).join('');
-    
-    select.innerHTML = '<option value="">Escolha um exercício...</option>' +
-        `<optgroup label="🏋️ Academia">${buildOptions(gymExercises)}</optgroup>` +
-        `<optgroup label="🏃 Ar Livre">${buildOptions(outdoorExercises)}</optgroup>`;
+}
+
+function filterExerciseCategory(category, btn) {
+    exerciseCategoryFilter = category;
+    document.querySelectorAll('#exerciseCategoryFilter .category-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderExerciseGrid();
+}
+
+function selectExercise(exerciseId) {
+    selectedExerciseId = exerciseId;
+    renderExerciseGrid();
 }
 
 function renderCustomExercisesList() {
@@ -458,16 +471,20 @@ function renderCustomExercisesList() {
 function handleLogExercise(event) {
     event.preventDefault();
     
-    const exerciseId = parseInt(document.getElementById('exerciseSelect').value);
+    if (!selectedExerciseId) {
+        alert('Selecione um exercício');
+        return;
+    }
+    
     const duration = parseFloat(document.getElementById('exerciseDuration').value);
     const sets = parseInt(document.getElementById('exerciseSets').value) || 0;
     const reps = parseInt(document.getElementById('exerciseReps').value) || 0;
     const weight = parseFloat(document.getElementById('exerciseWeight').value) || 0;
     
-    logExercise(exerciseId, duration, sets, reps, weight);
+    logExercise(selectedExerciseId, duration, sets, reps, weight);
     
     // Clear form
-    document.getElementById('exerciseSelect').value = '';
+    selectedExerciseId = null;
     document.getElementById('exerciseDuration').value = '';
     document.getElementById('exerciseSets').value = '';
     document.getElementById('exerciseReps').value = '';
@@ -560,11 +577,28 @@ function getBMIStatus(bmi) {
 }
 
 // Screen Navigation
+function updateBottomNav(screenName) {
+    document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
+    const bottomMap = {
+        addMeal: 'bottomAddMeal',
+        exercises: 'bottomExercise',
+        logExercise: 'bottomExercise',
+        addCustomExercise: 'bottomExercise',
+        calendar: 'bottomCalendar'
+    };
+    const btnId = bottomMap[screenName];
+    if (btnId) {
+        const btn = document.getElementById(btnId);
+        if (btn) btn.classList.add('active');
+    }
+}
+
 function showScreen(screenName) {
     document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
     });
     document.getElementById(screenName + 'Screen').classList.add('active');
+    updateBottomNav(screenName);
     
     if (screenName === 'dashboard') {
         updateDashboard();
@@ -587,7 +621,12 @@ function showScreen(screenName) {
     } else if (screenName === 'exercises') {
         renderExerciseList();
     } else if (screenName === 'logExercise') {
-        renderExerciseSelect();
+        selectedExerciseId = null;
+        exerciseCategoryFilter = 'all';
+        document.querySelectorAll('#exerciseCategoryFilter .category-btn').forEach(b => b.classList.remove('active'));
+        const allBtn = document.querySelector('#exerciseCategoryFilter .category-btn');
+        if (allBtn) allBtn.classList.add('active');
+        renderExerciseGrid();
     } else if (screenName === 'addCustomExercise') {
         renderCustomExercisesList();
     } else if (screenName === 'calendar') {
@@ -902,8 +941,6 @@ function updateSelectedFoods() {
                 </div>
                 <button type="button" class="grams-btn" onclick="adjustGrams(${food.food_id}, 10)">+</button>
             </div>
-            <input type="range" class="grams-slider" min="0" max="500" step="5"
-                   value="${food.grams}" oninput="updateGrams(${food.food_id}, this.value)">
             <div class="grams-presets">
                 ${presets.map(g => `<button type="button" class="grams-preset-btn ${Number(food.grams) === g ? 'active' : ''}" onclick="updateGrams(${food.food_id}, ${g})">${g}g</button>`).join('')}
             </div>
