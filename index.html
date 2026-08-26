@@ -272,6 +272,17 @@
             margin-top: 4px;
         }
 
+        .exercise-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 56px;
+        }
+
+        .exercise-card .food-name {
+            margin-top: 0;
+        }
+
         .category-filter {
             display: flex;
             gap: 8px;
@@ -448,6 +459,65 @@
             align-items: center;
             justify-content: center;
             font-size: 18px;
+        }
+
+        .profile-header-row {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .profile-photo-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .profile-photo-circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: #0f2438;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 3px solid #0099ff;
+            box-shadow: var(--glow);
+        }
+
+        .profile-photo-btn {
+            cursor: pointer;
+            font-size: 11px;
+            text-align: center;
+            color: #00e5ff;
+            border: 1px solid #0099ff;
+            border-radius: 20px;
+            padding: 5px 10px;
+            white-space: nowrap;
+        }
+
+        .profile-photo-btn:hover {
+            background: #012a4a;
+            box-shadow: var(--glow);
+        }
+
+        .profile-info-col {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .profile-info-col h2 {
+            font-size: 20px;
+            word-break: break-word;
+        }
+
+        .profile-info-col p {
+            font-size: 13px;
+            margin-top: 4px;
         }
 
         .bottom-nav {
@@ -1029,18 +1099,19 @@
         <!-- Profile Screen -->
         <div id="profileScreen" class="screen">
             <div class="card">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <div id="profilePhotoContainer" style="width: 100px; height: 100px; border-radius: 50%; background: #0f2438; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; overflow: hidden; border: 3px solid #0099ff;">
-                        <span style="font-size: 50px;">👤</span>
-                    </div>
-                    <h2 style="color: #00e5ff; margin-top: 10px;" id="profileName"></h2>
-                    <p style="color: #a0a0a0;" id="profileInfo"></p>
-                    
-                    <div class="form-group" style="margin-top: 15px;">
-                        <label for="profilePhotoInput" class="btn btn-primary" style="cursor: pointer; display: inline-block; width: auto; padding: 10px 20px;">
-                            📷 Alterar Foto de Perfil
+                <div class="profile-header-row">
+                    <div class="profile-photo-col">
+                        <div id="profilePhotoContainer" class="profile-photo-circle">
+                            <span style="font-size: 42px;">👤</span>
+                        </div>
+                        <label for="profilePhotoInput" class="profile-photo-btn">
+                            📷 Alterar Foto
                         </label>
                         <input type="file" id="profilePhotoInput" accept="image/*" onchange="handleProfilePhotoUpload(event)" style="display: none;">
+                    </div>
+                    <div class="profile-info-col">
+                        <h2 style="color: #00e5ff;" id="profileName"></h2>
+                        <p style="color: #a0a0a0;" id="profileInfo"></p>
                     </div>
                 </div>
                 
@@ -1255,32 +1326,43 @@
                 
                 <label style="display: block; margin-bottom: 8px; font-weight: bold; color: var(--accent);">Selecione o Exercício</label>
                 <div class="category-filter" id="exerciseCategoryFilter">
-                    <button type="button" class="category-btn active" onclick="filterExerciseCategory('all', this)">Todos</button>
-                    <button type="button" class="category-btn" onclick="filterExerciseCategory('gym', this)">🏋️ Academia</button>
-                    <button type="button" class="category-btn" onclick="filterExerciseCategory('outdoor', this)">🏃 Ar Livre</button>
+                    <button type="button" class="category-btn active" onclick="filterExerciseMuscle('all', this)">Todos</button>
+                    <button type="button" class="category-btn" onclick="filterExerciseMuscle('peito', this)">Peito</button>
+                    <button type="button" class="category-btn" onclick="filterExerciseMuscle('costas', this)">Costas</button>
+                    <button type="button" class="category-btn" onclick="filterExerciseMuscle('pernas', this)">Pernas</button>
+                    <button type="button" class="category-btn" onclick="filterExerciseMuscle('ombros', this)">Ombros</button>
+                    <button type="button" class="category-btn" onclick="filterExerciseMuscle('bíceps', this)">Bíceps</button>
+                    <button type="button" class="category-btn" onclick="filterExerciseMuscle('tríceps', this)">Tríceps</button>
+                    <button type="button" class="category-btn" onclick="filterExerciseMuscle('abdomen', this)">Abdômen</button>
+                    <button type="button" class="category-btn" onclick="filterExerciseMuscle('cardio', this)">Cardio</button>
+                    <button type="button" class="category-btn" onclick="filterExerciseMuscle('full_body', this)">Corpo Inteiro</button>
                 </div>
                 
                 <div class="food-grid" id="exerciseGrid"></div>
                 
                 <form onsubmit="handleLogExercise(event)" style="margin-top: 20px;">
-                    <div class="form-group">
+                    <p id="exerciseFormHint" style="color: #888; font-size: 13px; margin-bottom: 10px;">Escolha um exercício acima para ver os campos de registro.</p>
+                    
+                    <div class="form-group hidden" id="exerciseDurationGroup">
                         <label>Duração (minutos)</label>
-                        <input type="number" id="exerciseDuration" required min="1" placeholder="30">
+                        <input type="number" id="exerciseDuration" min="1" placeholder="30">
                     </div>
                     
-                    <div class="form-group">
-                        <label>Séries</label>
-                        <input type="number" id="exerciseSets" min="1" placeholder="3">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Repetições</label>
-                        <input type="number" id="exerciseReps" min="1" placeholder="12">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Peso (kg) - Opcional</label>
-                        <input type="number" id="exerciseWeight" min="0" step="0.5" placeholder="20">
+                    <div id="exerciseStrengthGroup" class="hidden">
+                        <div class="form-group">
+                            <label>Séries</label>
+                            <input type="number" id="exerciseSets" min="1" placeholder="3">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Repetições</label>
+                            <input type="number" id="exerciseReps" min="1" placeholder="12">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Peso (kg) - Opcional</label>
+                            <input type="number" id="exerciseWeight" min="0" step="0.5" placeholder="20">
+                        </div>
                     </div>
                     
                     <button type="submit" class="btn btn-primary">
